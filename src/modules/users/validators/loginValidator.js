@@ -3,9 +3,11 @@ const messageErrorLogin = require('./function_errorMessageLogin');
 
 const loginValidation = Joi.object({
     email: Joi.string()
+        .email()
         .max(255)
         .required()
         .messages({
+            'string.email': messageErrorLogin().email.email,
             'string.empty': messageErrorLogin().email.empty,
             'string.max': messageErrorLogin().email.max(255),
             'any.required': messageErrorLogin().email.required,

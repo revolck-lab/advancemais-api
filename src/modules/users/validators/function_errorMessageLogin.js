@@ -1,5 +1,6 @@
 const messageErrorLogin = () => ({
     email: {
+        email: 'The email must be a valid address.',
         empty: 'Email is required.',
         invalid: 'The email provided is not valid.',
         max: (max) => `Email cannot exceed ${max} characters.`,

@@ -1,59 +1,59 @@
-module.exports = function messageErrorUser() {
-    return {
-        name: {
-            nameFormat: "O nome deve conter apenas letras e espaços.",
-            empty: "O nome não pode estar vazio.",
-            max: (max) => `O nome deve ter no máximo ${max} caracteres.`,
-            min: (min) => `O nome deve ter no mínimo ${min} caracteres.`,
-            required: "O nome é obrigatório.",
-        },
-        email: {
-            email: "O email deve ser válido.",
-            empty: "O email não pode estar vazio.",
-            max: (max) => `O email deve ter no máximo ${max} caracteres.`,
-            required: "O email é obrigatório.",
-        },
-        password: {
-            passwordMin: "A senha deve conter ao menos uma letra maiúscula e um caractere especial.",
-            min: (min) => `A senha deve ter no mínimo ${min} caracteres.`,
-            max: (max) => `A senha deve ter no máximo ${max} caracteres.`,
-            empty: "A senha não pode estar vazia.",
-            required: "A senha é obrigatória.",
-        },
-        cpf: {
-            empty: "O CPF não pode estar vazio.",
-            length: (length) => `O CPF deve ter ${length} caracteres.`,
-            number: "O CPF deve conter apenas números.",
-            required: "O CPF é obrigatório.",
-        },
-        phone_user: {
-            empty: "O telefone não pode estar vazio.",
-            length: (length) => `O telefone deve ter ${length} caracteres.`,
-            number: "O telefone deve conter apenas números.",
-            required: "O telefone é obrigatório.",
-        },
-        gender_id: {
-            number: "O ID de gênero deve ser um número inteiro.",
-            required: "O ID de gênero é obrigatório.",
-        },
-        education_id: {
-            number: "O ID de educação deve ser um número inteiro.",
-            required: "O ID de educação é obrigatório.",
-        },
-        role_id: {
-            number: "O ID de função deve ser um número inteiro.",
-            required: "O ID de função é obrigatório.",
-        },
-        address_id: {
-            number: "O ID de endereço deve ser um número inteiro.",
-            required: "O ID de endereço é obrigatório.",
-        },
-        code_user: {
-            required: "O código do usuário é obrigatório.",
-        },
-        birth_date: {
-            invalid: "A data de nascimento deve ser válida.",
-            required: "A data de nascimento é obrigatória.",
-        },
-    };
-};
+const messageErrorUser = () => ({
+    name: {
+        nameFormat: "The name must contain only letters and spaces.",
+        empty: "The name cannot be empty.",
+        max: (max) => `The name must have a maximum of ${max} characters.`,
+        min: (min) => `The name must have at least ${min} characters.`,
+        required: "The name is required.",
+    },
+    email: {
+        email: "The email must be valid.",
+        empty: "The email cannot be empty.",
+        max: (max) => `The email must have a maximum of ${max} characters.`,
+        required: "The email is required.",
+    },
+    password: {
+        passwordMin: "The password must contain at least one uppercase letter and one special character.",
+        min: (min) => `The password must have at least ${min} characters.`,
+        max: (max) => `The password must have a maximum of ${max} characters.`,
+        empty: "The password cannot be empty.",
+        required: "The password is required.",
+    },
+    cpf: {
+        empty: "The CPF cannot be empty.",
+        length: (length) => `The CPF must have ${length} characters.`,
+        number: "The CPF must contain only numbers.",
+        required: "The CPF is required.",
+    },
+    phone_user: {
+        empty: "The phone number cannot be empty.",
+        length: (length) => `The phone number must have ${length} characters.`,
+        number: "The phone number must contain only numbers.",
+        required: "The phone number is required.",
+    },
+    gender_id: {
+        number: "The gender ID must be an integer.",
+        required: "The gender ID is required.",
+    },
+    education_id: {
+        number: "The education ID must be an integer.",
+        required: "The education ID is required.",
+    },
+    role_id: {
+        number: "The role ID must be an integer.",
+        required: "The role ID is required.",
+    },
+    address_id: {
+        number: "The address ID must be an integer.",
+        required: "The address ID is required.",
+    },
+    code_user: {
+        required: "The user code is required.",
+    },
+    birth_date: {
+        invalid: "The birth date must be valid.",
+        required: "The birth date is required.",
+    },
+});
+
+module.exports = messageErrorUser;
