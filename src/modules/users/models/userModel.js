@@ -18,6 +18,10 @@ const userModel = {
         const db = await knexInstance();
         return db('users').where({ id }).first();
     },
+    findByLevel: async (role_id) => {
+        const db = await knexInstance();
+        return db('role').where({ id: role_id }).first();
+    },
     update: async (id, user) => {
         const db = await knexInstance();
         return db('users').where({ id }).update(user);
