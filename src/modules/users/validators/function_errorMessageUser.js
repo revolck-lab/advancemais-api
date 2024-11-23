@@ -1,34 +1,59 @@
-const messageErrorUser = (field) => {
-    const messages = {
-        full_name: {
-            nameFormat: 'The full name should contain only letters and spaces.',
-            empty: 'The full name is required.',
-            max: (max) => `The full name must be at most ${max} characters.`,
-            min: (min) => `The full name must be at least ${min} characters.`,
-            required: 'The full name is required.'
-        },
-        CPF: {
-            empty: 'The CPF is required.',
-            min: (min) => `The CPF must have exactly ${min} digits.`,
-            number: 'The CPF should contain only numbers.',
-            required: 'The CPF is required.'
-        },
-        password: {
-            passwordMin: 'The password must contain at least one special character and one uppercase letter.',
-            min: (min) => `The password must be at least ${min} characters.`,
-            max: (max) => `The password must be at most ${max} characters.`,
-            empty: 'The password is required.',
-            required: 'The password is required.'
+module.exports = function messageErrorUser() {
+    return {
+        name: {
+            nameFormat: "O nome deve conter apenas letras e espaços.",
+            empty: "O nome não pode estar vazio.",
+            max: (max) => `O nome deve ter no máximo ${max} caracteres.`,
+            min: (min) => `O nome deve ter no mínimo ${min} caracteres.`,
+            required: "O nome é obrigatório.",
         },
         email: {
-            email: 'The email must be a valid address.',
-            empty: 'The email is required.',
-            max: (max) => `The email must be at most ${max} characters.`,
-            required: 'The email is required.'
-        }
+            email: "O email deve ser válido.",
+            empty: "O email não pode estar vazio.",
+            max: (max) => `O email deve ter no máximo ${max} caracteres.`,
+            required: "O email é obrigatório.",
+        },
+        password: {
+            passwordMin: "A senha deve conter ao menos uma letra maiúscula e um caractere especial.",
+            min: (min) => `A senha deve ter no mínimo ${min} caracteres.`,
+            max: (max) => `A senha deve ter no máximo ${max} caracteres.`,
+            empty: "A senha não pode estar vazia.",
+            required: "A senha é obrigatória.",
+        },
+        cpf: {
+            empty: "O CPF não pode estar vazio.",
+            length: (length) => `O CPF deve ter ${length} caracteres.`,
+            number: "O CPF deve conter apenas números.",
+            required: "O CPF é obrigatório.",
+        },
+        phone_user: {
+            empty: "O telefone não pode estar vazio.",
+            length: (length) => `O telefone deve ter ${length} caracteres.`,
+            number: "O telefone deve conter apenas números.",
+            required: "O telefone é obrigatório.",
+        },
+        gender_id: {
+            number: "O ID de gênero deve ser um número inteiro.",
+            required: "O ID de gênero é obrigatório.",
+        },
+        education_id: {
+            number: "O ID de educação deve ser um número inteiro.",
+            required: "O ID de educação é obrigatório.",
+        },
+        role_id: {
+            number: "O ID de função deve ser um número inteiro.",
+            required: "O ID de função é obrigatório.",
+        },
+        address_id: {
+            number: "O ID de endereço deve ser um número inteiro.",
+            required: "O ID de endereço é obrigatório.",
+        },
+        code_user: {
+            required: "O código do usuário é obrigatório.",
+        },
+        birth_date: {
+            invalid: "A data de nascimento deve ser válida.",
+            required: "A data de nascimento é obrigatória.",
+        },
     };
-
-    return messages[field];
 };
-
-module.exports = messageErrorUser;

@@ -1,16 +1,16 @@
 const messageErrorLogin = () => ({
-    login: {
-        empty: 'Login cannot be empty. Enter your email or CPF',
-        required: 'Login is required.',
-        max: (limit) => `Login must have a maximum length of ${limit} characters.`,
-        invalid: 'Login must be a valid email or CPF.',
+    email: {
+        empty: 'Email is required.',
+        invalid: 'The email provided is not valid.',
+        max: (max) => `Email cannot exceed ${max} characters.`,
+        required: 'Email is a required field.',
     },
     password: {
-        empty: 'Password cannot be empty.',
-        required: 'Password is required.',
-        min: (limit) => `The password must be at least ${limit} characters long.`,
-        max: (limit) => `The password must be at most ${limit} characters long.`,
-        pattern: 'The password must contain at least one uppercase letter and one special character.',
+        empty: 'Password is required.',
+        min: (min) => `Password must be at least ${min} characters long.`,
+        max: (max) => `Password cannot exceed ${max} characters.`,
+        required: 'Password is a required field.',
+        pattern: 'Password does not meet the required format.',
     },
 });
 
