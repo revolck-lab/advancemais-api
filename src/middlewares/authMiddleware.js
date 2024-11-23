@@ -19,8 +19,14 @@ const authToken = async (req, res, next) => {
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-
         req.user = user;
+
+        const roleLevel = await userModel.findByLevel(req.user.role_id);
+        if (!roleLevel) {
+            return res.status(404).json({ error: 'Role not found for the user' });
+        }
+        
+        req.user.role_level = roleLevel.level;
         next();
     } catch (error) {
         console.error('Error in authentication middleware:', error);
