@@ -1,8 +1,6 @@
-const userModel = require('../models/userModel');
 const loginValidation = require('../validators/loginValidator');
 const userValidation = require('../validators/userValidator');
-const format = require('../../../utils/function_formatText');
-const bcrypt = require('bcrypt');
+const { loginUser } = require('../services/userService');
 
 const userController = {
     login: async (req, res) => {
