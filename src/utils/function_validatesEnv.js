@@ -1,7 +1,7 @@
-const dotenv = require('dotenv');
+// const dotenv = require('dotenv');
 
-const validateEnvVariables = (envVars = []) => {
-    const defaultrequiredEnvVariables = ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_DATABASE', 'DB_PORT', 'PORT', 'JWT'];
+const validateEnvVariables = async = (envVars = []) => {
+    const defaultrequiredEnvVariables = ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_DATABASE', 'DB_PORT', 'PORT', 'JWT_SECRET'];
     const requiredEnvVariables = envVars.length ? envVars : defaultrequiredEnvVariables;
 
     const missingVars = requiredEnvVariables.filter((varName) => !process.env[varName]);
