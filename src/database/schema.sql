@@ -53,7 +53,7 @@ CREATE TABLE user (
     gender_id INT NOT NULL,
     education_id INT NOT NULL,
     status TINYINT(1) DEFAULT 1,  -- Boolean em MySQL
-    code_user INT NOT NULL UNIQUE,
+    code_user VARCHAR(9) NOT NULL UNIQUE,
     role_id INT NOT NULL,  -- Sempre NOT NULL
     address_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
