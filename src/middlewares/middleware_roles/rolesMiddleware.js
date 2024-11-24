@@ -1,6 +1,7 @@
 const authorization = {
     checkRole: (role) => {
         return (req, res, next) => {
+            console.log(role)
             if (!req.user || req.user.role_id !== role) {
                 return res.status(403).json({ error: `Access denied: This resource is for ${role}s only` });
             }
@@ -15,7 +16,8 @@ const authorization = {
 
     accessLevel: (requiredLevel) => {
         return (req, res, next) => {
-            const level = req.user.role_level;
+            const level = req.user.role_id;
+            console.log(level)
             if (level < requiredLevel) {
                 return res.status(403).json({ error: `Access denied: You need level ${requiredLevel} or higher to access this resource.` });
             }
