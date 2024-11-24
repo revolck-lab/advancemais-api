@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
 const addressModel = require('../models/addressModel');
 const generateCode = require('../../../utils/generateCode');
+const format = require('../../../utils/function_formatText');
 
 const loginUser =  async (email, password) => {
     const user = await userModel.findByEmail(email);
@@ -60,9 +61,12 @@ const registerUser = async (userData) => {
 
     const codeUser = generateCode();
 
+    const formatName = await format.formatText(name);
+    const formatEmail = await format.formatEmail(email);
+
     const userId = await userModel.create({
-        name,
-        email,
+        name: formatName,
+        email: formatEmail,
         password: hashedPassword,
         birth_date,
         cpf,
