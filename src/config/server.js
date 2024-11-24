@@ -1,6 +1,6 @@
 const app = require('../app');
 const connectDatabase = require('./db');
-const validateEnvVariables = require('../utils/function_validatesEnv');
+const validateEnvVariables = require('../utils/validatesEnv');
 
 const startServer = async () => {
     try {
