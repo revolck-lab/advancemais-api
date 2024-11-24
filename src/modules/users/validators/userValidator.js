@@ -85,19 +85,42 @@ const userValidation = Joi.object({
             'any.required': messageErrorUser().role_id.required,
         }),
 
-    address_id: Joi.number()
-        .integer()
+    address: Joi.string()
+        .max(255)
         .required()
         .messages({
-            'number.base': messageErrorUser().address_id.number,
-            'any.required': messageErrorUser().address_id.required,
+            'string.empty': messageErrorUser().address.empty,
+            'string.max': messageErrorUser().address.max(255),
+            'any.required': messageErrorUser().address.required,
         }),
 
-    code_user: Joi.string()
+    city: Joi.string()
+        .max(255)
         .required()
         .messages({
-            'string.empty': messageErrorUser().code_user.required,
-            'any.required': messageErrorUser().code_user.required,
+            'string.empty': messageErrorUser().city.empty,
+            'string.max': messageErrorUser().city.max(255),
+            'any.required': messageErrorUser().city.required,
+        }),
+
+    state: Joi.string()
+        .max(255)
+        .required()
+        .messages({
+            'string.empty': messageErrorUser().state.empty,
+            'string.max': messageErrorUser().state.max(255),
+            'any.required': messageErrorUser().state.required,
+        }),
+
+    cep: Joi.string()
+        .length(8)
+        .pattern(/^[0-9]{8}$/)
+        .required()
+        .messages({
+            'string.empty': messageErrorUser().cep.empty,
+            'string.length': messageErrorUser().cep.length(8),
+            'string.pattern.base': messageErrorUser().cep.number,
+            'any.required': messageErrorUser().cep.required,
         }),
 
     birth_date: Joi.date()

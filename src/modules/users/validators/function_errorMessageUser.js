@@ -43,17 +43,34 @@ const messageErrorUser = () => ({
         number: "The role ID must be an integer.",
         required: "The role ID is required.",
     },
-    address_id: {
-        number: "The address ID must be an integer.",
-        required: "The address ID is required.",
+    address: {
+        empty: "The address cannot be empty.",
+        max: (max) => `The address must have a maximum of ${max} characters.`,
+        required: "The address is required.",
     },
-    code_user: {
-        required: "The user code is required.",
+    city: {
+        empty: "The city cannot be empty.",
+        max: (max) => `The city must have a maximum of ${max} characters.`,
+        required: "The city is required.",
+    },
+    state: {
+        empty: "The state cannot be empty.",
+        max: (max) => `The state must have a maximum of ${max} characters.`,
+        required: "The state is required.",
+    },
+    cep: {
+        empty: "The CEP cannot be empty.",
+        length: (length) => `The CEP must have ${length} characters.`,
+        number: "The CEP must contain only numbers.",
+        required: "The CEP is required.",
     },
     birth_date: {
         invalid: "The birth date must be valid.",
         required: "The birth date is required.",
     },
+    status: {
+        only: "Status should be 0 or 1.",
+    }
 });
 
 module.exports = messageErrorUser;

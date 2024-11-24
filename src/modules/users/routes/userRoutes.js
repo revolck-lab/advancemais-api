@@ -12,19 +12,19 @@ router.get('/auth/welcome', (req, res) => {
 router.post('/auth/login', userController.login);
 router.post('/auth/register', userController.register);
 
-router.get('/auth/permission/student', authToken, authorization.admin, (req, res) => {
+router.get('/auth/permission/student', authToken, authorization.student, (req, res) => {
     res.json({ message: 'Access granted: Student' });
 });
 
-router.get('/auth/permission/teacher', authToken, authorization.admin, (req, res) => {
+router.get('/auth/permission/teacher', authToken, authorization.teacher, (req, res) => {
     res.json({ message: 'Access granted: Teacher' });
 });
 
-router.get('/auth/permission/company', authToken, authorization.admin, (req, res) => {
+router.get('/auth/permission/company', authToken, authorization.company, (req, res) => {
     res.json({ message: 'Access granted: Company' });
 });
 
-router.get('/auth/permission/admin', authToken, authorization.accessLevel(4), (req, res) => {
+router.get('/auth/permission/admin', authToken, authorization.accessLevel(3), (req, res) => {
     res.json({ message: 'Access granted: Admin' });
 });
 
