@@ -10,9 +10,9 @@ const userController = {
                 return res.status(400).json({ error: error.details[0].message });
             }
 
-            const { email, password } = req.body;
+            const { login, password } = req.body;
 
-            const { error: loginError, token } = await loginUser(email, password);
+            const { error: loginError, token } = await loginUser(login, password);
 
             if (loginError) {
                 return res.status(401).json({ error: loginError });

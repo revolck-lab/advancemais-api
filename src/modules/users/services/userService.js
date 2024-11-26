@@ -1,11 +1,15 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
+const companyModel = require('../models/companyModel');
 const generateCode = require('../../../utils/generateCode');
 const format = require('../../../utils/formatText');
 
-const loginUser = async (email, password) => {
-    const user = await userModel.findByEmail(email);
+const loginUser = async (login, password) => {
+    const user = login.length > 11
+                ? await companyModel.findByCnpj(login)
+                : await userModel.findByCpf(login);
+
     if (!user) return { error: 'Invalid credentials' };
 
     const isPasswordValid = await bcrypt.compare(password, user.password);

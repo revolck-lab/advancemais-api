@@ -2,16 +2,17 @@ const Joi = require('joi');
 const messageErrorLogin = require('./errorMessageLogin');
 
 const loginValidation = Joi.object({
-    email: Joi.string()
-        .email()
-        .max(255)
+    login: Joi.string()
+        .pattern(/^\d+$/)
+        .min(11)
+        .max(14)
         .required()
         .messages({
-            'string.email': messageErrorLogin().email.email,
-            'string.empty': messageErrorLogin().email.empty,
-            'string.max': messageErrorLogin().email.max(255),
-            'any.required': messageErrorLogin().email.required,
-            'any.invalid': messageErrorLogin().email.invalid,
+            'string.pattern.base': messageErrorLogin().login.invalid,
+            'string.empty': messageErrorLogin().login.empty,
+            'string.min': messageErrorLogin().login.min(11),
+            'string.max': messageErrorLogin().login.max(14),
+            'any.required': messageErrorLogin().login.required,
         }),
     password: Joi.string()
         .max(255)
