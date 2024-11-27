@@ -1,12 +1,15 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
-const addressModel = require('../models/addressModel');
+const companyModel = require('../models/companyModel');
 const generateCode = require('../../../utils/generateCode');
-const format = require('../../../utils/function_formatText');
+const format = require('../../../utils/formatText');
 
-const loginUser =  async (email, password) => {
-    const user = await userModel.findByEmail(email);
+const loginUser = async (login, password) => {
+    const user = login.length > 11
+                ? await companyModel.findByCnpj(login)
+                : await userModel.findByCpf(login);
+
     if (!user) return { error: 'Invalid credentials' };
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -29,7 +32,7 @@ const registerUser = async (userData) => {
         gender_id,
         education_id,
         role_id,
-        address,   
+        address,
         city,
         state,
         cep,
@@ -50,13 +53,13 @@ const registerUser = async (userData) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const addressData = { 
-        address, 
-        city, 
-        state, 
-        cep 
+    const addressData = {
+        address,
+        city,
+        state,
+        cep
     };
-    
+
     const addressId = await addressModel.create(addressData);
 
     const codeUser = generateCode();
@@ -74,7 +77,7 @@ const registerUser = async (userData) => {
         gender_id,
         education_id,
         role_id,
-        address_id: addressId,  
+        address_id: addressId,
         code_user: codeUser,
     });
 
@@ -84,7 +87,7 @@ const registerUser = async (userData) => {
     return { user: newUser };
 };
 
-module.exports = { 
-    loginUser, 
+module.exports = {
+    loginUser,
     registerUser
 };

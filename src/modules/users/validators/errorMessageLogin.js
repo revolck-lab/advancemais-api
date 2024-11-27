@@ -1,11 +1,11 @@
 const messageErrorLogin = () => ({
-    email: {
-        email: 'The email must be a valid address.',
-        empty: 'Email is required.',
-        invalid: 'The email provided is not valid.',
-        max: (max) => `Email cannot exceed ${max} characters.`,
-        required: 'Email is a required field.',
-    },
+    login: {
+        invalid: 'Login must contain only numbers.',
+        empty: 'The login field cannot be empty.',
+        min: (min) => `Login must have at least ${min} characters.`,
+        max: (max) => `Login must have at most ${max} characters.`,
+        required: 'The login field is required.',
+    },    
     password: {
         empty: 'Password is required.',
         min: (min) => `Password must be at least ${min} characters long.`,
