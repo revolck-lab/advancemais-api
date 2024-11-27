@@ -39,7 +39,7 @@ router.post('/register', validate(userValidation), userController.register);
  * /users/login:
  *   post:
  *     summary: Login de usuário
- *     description: Realiza login de um usuário com email e senha
+ *     description: Realiza login de um usuário com login(CPF ou CNPJ) e senha
  *     tags: [Users]
  *     requestBody:
  *       required: true

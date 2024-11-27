@@ -74,10 +74,10 @@ const swaggerOptions = {
           Login: {
             type: 'object',
             properties: {
-              email: {
-                type: 'string',
-                format: 'email',
-                description: 'Email do usuário',
+              login: {
+                type: 'number',
+                format: 'cpf' || 'cnpj',
+                description: 'CPF ou CNPJ do usuário',
               },
               password: {
                 type: 'string',
