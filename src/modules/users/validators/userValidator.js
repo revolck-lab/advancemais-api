@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const messageErrorUser = require('./function_errorMessageUser');
+const messageErrorUser = require('./errorMessageUser');
 
 const userValidation = Joi.object({
     name: Joi.string()
