@@ -7,6 +7,6 @@ router.get("/reset-password", (req, res) => {
   res.status(200).json({ message: "Welcome!!" });
 });
 
-router.post('/reset-password', recoveryController.requestPasswordRecovery);
+router.post('/recovery-password', recoveryController.requestPasswordRecovery);
 
 module.exports = router;
