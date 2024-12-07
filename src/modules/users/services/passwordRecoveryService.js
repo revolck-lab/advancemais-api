@@ -1,7 +1,7 @@
 const { generatePasswordResetToken } = require('../../../services/tokenService');
 const { sendEmail } = require('../../../services/emailServices');
 
-const recoveryService = async (login) => {
+const recoveryService = async (login, email) => {
   if(!login) {
     throw new Error('CPF or CNPJ are mandatory to generate the password reset token.');
   }

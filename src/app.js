@@ -3,6 +3,7 @@ const app = express();
 const cors = require('cors');
 const { swaggerUi, swaggerDocs } = require('./config/swagger');
 const userRoutes = require('./modules/users/routes/userRoutes');
+const passwordResetRoutes = require('./modules/users/routes/passwordResetRoutes');
 
 
 // Configura o middleware CORS
@@ -17,6 +18,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use('/api', userRoutes);
+app.use('/api', passwordResetRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 module.exports = app;

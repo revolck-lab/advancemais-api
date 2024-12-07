@@ -11,8 +11,6 @@ const verifyToken = (token) => {
     return jwt.verify(token, JWT_SECRET);
 };
 
-const jwt = require("jsonwebtoken");
-
 const generatePasswordResetToken =  (login) => {
   if (!login) throw new Error('CPF or CNPJ are mandatory to generate the password reset token.');
 
