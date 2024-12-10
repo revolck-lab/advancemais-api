@@ -8,5 +8,6 @@ router.get("/reset-password", (req, res) => {
 });
 
 router.post('/recovery-password', recoveryController.requestPasswordRecovery);
+router.post('/reset-password', recoveryController.resetPassword);
 
 module.exports = router;
