@@ -22,6 +22,10 @@ const companyModel = {
     const db = await knexInstance();
     return db("company").where({ id }).update(company);
   },
+  updatePassword: async (cnpj, hashedPassword) => {
+    const db = await knexInstance();
+    return db('company').where({ cnpj }).update({ password: hashedPassword });
+  },  
   delete: async (id) => {
     const db = await knexInstance();
     return db("company").where({ id }).del();
