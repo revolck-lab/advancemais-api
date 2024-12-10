@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
+const addressModel = require('../models/addressModel');
 const companyModel = require('../models/companyModel');
 const generateCode = require('../../../utils/generateCode');
 const format = require('../../../utils/formatText');
