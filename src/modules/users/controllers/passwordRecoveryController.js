@@ -1,12 +1,13 @@
 const recoveryService = require('../services/passwordRecoveryService');
 const userModel = require('../models/userModel');
 const companyModel = require('../models/companyModel');
-// const loginValidation = require('../validators/loginValidator');
+const loginValidation = require('../validators/loginValidator');
 
 const recoveryController = {
   requestPasswordRecovery: async (req, res) => {
     try {
-      const { error } = loginValidation.validate(req.body);
+      const loginSchema = loginValidation.fork(['password'], field => field.optional());
+      const { error } = loginSchema.validate(req.body);
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
       }
