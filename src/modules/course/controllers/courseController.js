@@ -1,8 +1,14 @@
 const courseService = require("../services/courseService");
+const courseValidator = require("../validators/courseValidator");
 
 const courseController = {
   createCourse: async (req, res) => {
     try {
+      const { error } = courseValidator.validate(req.body);
+      if (error) {
+        return res.staus(400).json({ error: error.details[0].message });
+      }
+
       const courseData = req.body;
 
       const courseId = await courseService.createCourse(courseData);
@@ -23,6 +29,9 @@ const courseController = {
   getCourseDetails: async (req, res) => {
     try {
       const { id } = req.params;
+      if (!id) {
+        return res.status(400).json({ message: 'ID underfined' });
+      }
 
       const courseDetails = await courseService.getCourseDetails(id);
 
