@@ -1,6 +1,7 @@
 const express = require('express');
-const router = express.Router();
 const vacanciesController = require('../controllers/vacanciesController');
+
+const router = express.Router();
 
 router.get('/vacancies-welcome', (req, res) => {
   return res.status(200).json({ messagem: 'Welcome!' });
