@@ -1,6 +1,4 @@
-const courseImageModel = require("../models/courseImageModel");
-const courseThumbnailModel = require("../models/courseThumbnailModel");
-const courseModel = require("../models/courseModel");
+const { courseImageModel, courseModel, courseThumbnailModel } = require("../models/courseModel");
 
 const courseService = {
   createCourse: async (courseData) => {
@@ -56,14 +54,17 @@ const courseService = {
         return null;
       }
 
-      const courseImage = await courseImageModel.findById(course.course_image_id);
-      const courseThumbnail = await courseThumbnailModel.findById(course.thumbnail_id);
-
-      return {
-        ...course,
-        course_image: courseImage,
-        course_thumbnail: courseThumbnail,
+      const formattedCourse = {
+        id: course.id,
+        title: course.title,
+        description: course.description,
+        category_name: course.category_name,
+        modality_name: course.modality_name,
+        image_url: course.course_image_url,
+        thumbnail_url: course.thumbnail_url,
       };
+
+      return formattedCourse;
     } catch (error) {
       console.error("Error in getCourseDetails service:", error.message);
       throw error;
