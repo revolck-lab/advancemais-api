@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const errorMessageVacancy = require("./errorMessageVacancy");
+const errorMessageVacancy = require("./errorMessageVacancies");
 
 const vacancyValidation = Joi.object({
   title: Joi.string()

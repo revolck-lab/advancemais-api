@@ -15,35 +15,25 @@ const cleanFilters = (filters) => {
 const vacanciesService = {
   listVacancies: async (queryParams) => {
     const {
-      city,
       company_id,
-      state_id,
-      published_date,
-      area_id,
+      created_at,
       limit,
       offset,
     } = queryParams;
 
-    const filters = {
-      city,
+    const filters = cleanFilters({
       company_id,
-      state_id,
-      published_date,
-      area_id,
-    };
+      created_at,
+    });
 
     const paginationLimit = Math.min(parseInt(limit, 10) || 10, MAX_LIMIT);
     const paginationOffset = parseInt(offset, 10) || 0;
 
-    const cleanedFilters = cleanFilters(filters);
+    return await vacancyModel.list(filters, paginationLimit, paginationOffset);
+  },
 
-    const vacancies = await vacancyModel.list(
-      cleanedFilters,
-      paginationLimit,
-      paginationOffset
-    );
-
-    return vacancies;
+  getVacancyDetails: async (id) => {
+    return await vacancyModel.findById(id);
   },
 };
 
