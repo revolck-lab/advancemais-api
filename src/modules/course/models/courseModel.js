@@ -78,14 +78,21 @@ const courseModel = {
   
     const query = db('course')
       .select(
-        'course.id',
-        'course.title',
-        'course.description',
-        'category.name as category_name',
-        'modality.name as modality_name'
+      "course.id",
+        "course.title",
+        "course.description",
+        "course.price",
+        "course.workload",
+        "course.vacancies",
+        "category.name as category_name",
+        "modality.name as modality_name",
+        "course_image.url as course_image_url",
+        "course_thumbnail.thumbnail_url as thumbnail_url"
       )
-      .leftJoin('category', 'course.category_id', 'category.id')
-      .leftJoin('modality', 'course.modality_id', 'modality.id'); 
+      .leftJoin("category", "course.category_id", "category.id")
+      .leftJoin("modality", "course.modality_id", "modality.id")
+      .leftJoin("course_image", "course.course_image_id", "course_image.id")
+      .leftJoin("course_thumbnail", "course.thumbnail_id", "course_thumbnail.id")
   
     if (filters.category_id) query.where('course.category_id', filters.category_id);
     if (filters.modality_id) query.where('course.modality_id', filters.modality_id);
