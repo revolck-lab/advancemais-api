@@ -53,6 +53,34 @@ const courseController = {
       });
     }
   },
+  getCourses: async (req, res) => {
+    try {
+      const { category_id, modality_id } = req.query;
+      if (!category_id && !modality_id) {
+        return res.status(400).json({ message: 'One of the search parameters must be filled in' });
+      }
+  
+      const courses = await courseService.getCourses({
+        category_id,
+        modality_id,
+      });
+
+      if (!courses) {
+        return res.status(400).json({ message: 'Courses not found.' })
+      }
+  
+      return res.status(200).json({
+        message: 'Courses listed successfully!',
+        date: courses.results,
+        total: courses.total,
+        totalPages: courses.totalPages,
+        page: courses.page,
+      });
+    } catch (error) {
+      console.error("Error when searching for courses:", error.message);
+      return res.status(500).json({ message: 'Internal server error', error });
+    }
+  }
 };
 
 module.exports = courseController;

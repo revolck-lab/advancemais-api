@@ -58,6 +58,9 @@ const courseService = {
         id: course.id,
         title: course.title,
         description: course.description,
+        price: course.price,
+        workload: course.workload,
+        vacancies: course.vacancies,
         category_name: course.category_name,
         modality_name: course.modality_name,
         image_url: course.course_image_url,
@@ -70,6 +73,17 @@ const courseService = {
       throw error;
     }
   },
+
+  getCourses: async (filters) => {
+    try {
+      const courses = await courseModel.listCourse(filters);
+      return courses;
+    } catch (error) {
+      console.error('Erro ao recuperar cursos:', error.message);
+      throw error;
+    }
+  }
+  
 };
 
 module.exports = courseService;

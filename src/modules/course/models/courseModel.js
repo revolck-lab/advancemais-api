@@ -45,6 +45,9 @@ const courseModel = {
         "course.id",
         "course.title",
         "course.description",
+        "course.price",
+        "course.workload",
+        "course.vacancies",
         "category.name as category_name",
         "modality.name as modality_name",
         "course_image.url as course_image_url",
@@ -67,49 +70,46 @@ const courseModel = {
   },
   listCourse: async (filters = {}, page = 1, limit = 10) => {
     const db = await knexInstance();
-
+  
     page = Math.max(1, page);
     limit = Math.min(Math.max(1, limit), 100);
-
-    filters = typeof filters === "object" && filters !== null ? filters : {};
-
-    const query = db("course")
+  
+    filters = typeof filters === 'object' && filters !== null ? filters : {};
+  
+    const query = db('course')
       .select(
-        "course.id",
-        "course.title",
-        "course.description",
-        "course.popularity",
-        "category.name as category_name",
-        "modality.name as modality_name"
+        'course.id',
+        'course.title',
+        'course.description',
+        'category.name as category_name',
+        'modality.name as modality_name'
       )
-      .leftJoin("category", "course.category_id", "category.id")
-      .leftJoin("modality", "course.modality_id", "modality.id")
-      .where("course.id", id)
-      .first();
-
-    if (filters.category_id) query.where("course.category_id", filters.category_id);
-    if (filters.modality_id) query.where("course.modality_id", filters.modality_id);
-
+      .leftJoin('category', 'course.category_id', 'category.id')
+      .leftJoin('modality', 'course.modality_id', 'modality.id'); 
+  
+    if (filters.category_id) query.where('course.category_id', filters.category_id);
+    if (filters.modality_id) query.where('course.modality_id', filters.modality_id);
+  
     const offset = (page - 1) * limit;
     query.limit(limit).offset(offset);
-
-    const totalQuery = db("course")
-      .count("id as total")
+  
+    const totalQuery = db('course')
+      .count('id as total')
       .modify((qb) => {
-        if (filters.category_id) qb.where("category_id", filters.category_id);
-        if (filters.modality_id) qb.where("modality_id", filters.modality_id);
+        if (filters.category_id) qb.where('course.category_id', filters.category_id);
+        if (filters.modality_id) qb.where('course.modality_id', filters.modality_id);
       })
       .first();
-
+  
     const [results, { total }] = await Promise.all([query, totalQuery]);
-
+  
     return {
       results,
       total,
       page,
       totalPages: Math.ceil(total / limit),
     };
-  },
+  }      
 };
 
 module.exports = {
