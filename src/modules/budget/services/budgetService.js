@@ -1,4 +1,3 @@
-// services/budgetService.js
 const budgetModel = require("../models/budgetModel");
 
 const budgetService = {
@@ -9,6 +8,9 @@ const budgetService = {
 
   listBudgets: async () => {
     const budgets = await budgetModel.findAll();
+    if (!budget) {
+      throw new Error("Unable to return budget list");
+    }
     return budgets;
   },
 
@@ -18,14 +20,6 @@ const budgetService = {
       throw new Error("Budget not found");
     }
     return budget;
-  },
-
-  updateBudget: async (id, quotes) => {
-    const updatedRows = await budgetModel.update(id, quotes);
-    if (!updatedRows) {
-      throw new Error("Budget not found");
-    }
-    return updatedRows;
   },
 
   deleteBudget: async (id) => {
