@@ -4,6 +4,9 @@ const cors = require('cors');
 const { swaggerUi, swaggerDocs } = require('./config/swagger');
 const userRoutes = require('./modules/users/routes/userRoutes');
 const passwordResetRoutes = require('./modules/users/routes/passwordResetRoutes');
+const bannerRoutes = require('./modules/cms/routes/bannerRoutes');
+const authToken = require('./middlewares/authMiddleware');
+const authorization = require('./middlewares/middleware_roles/rolesMiddleware');
 
 
 // Configura o middleware CORS
@@ -21,4 +24,6 @@ app.use('/api', userRoutes);
 app.use('/api', passwordResetRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+app.use(authToken);
+app.use('/api', authorization.accessLevel(4), bannerRoutes);
 module.exports = app;
