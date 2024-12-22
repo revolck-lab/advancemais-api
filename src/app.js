@@ -5,6 +5,8 @@ const { swaggerUi, swaggerDocs } = require('./config/swagger');
 const userRoutes = require('./modules/users/routes/userRoutes');
 const passwordResetRoutes = require('./modules/users/routes/passwordResetRoutes');
 const bannerRoutes = require('./modules/cms/routes/bannerRoutes');
+const carouselRoutes = require('./modules/cms/routes/carouselRoutes');
+const carouselCompanyRoutes = require('./modules/cms/routes/carousel_companyRoutes');
 const authToken = require('./middlewares/authMiddleware');
 const authorization = require('./middlewares/middleware_roles/rolesMiddleware');
 
@@ -24,6 +26,9 @@ app.use('/api', userRoutes);
 app.use('/api', passwordResetRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+app.use('/api', carouselRoutes);
+app.use('/api', carouselCompanyRoutes);
+
 app.use(authToken);
 app.use('/api', authorization.accessLevel(4), bannerRoutes);
-module.exports = app;
+module.exports = app;
