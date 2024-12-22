@@ -25,8 +25,9 @@ CREATE TABLE address (
     id INT AUTO_INCREMENT PRIMARY KEY,
     address VARCHAR(255) NOT NULL,
     city VARCHAR(100) NOT NULL,
-    state VARCHAR(100) NOT NULL,
+    state_id VARCHAR(100) NOT NULL,
     cep CHAR(8) NOT NULL
+    FOREIGN KEY (state_id) REFERENCES state(id),
 );
 
 -- Tabela de categoria de cursos (category)
@@ -103,9 +104,21 @@ CREATE TABLE vacancy (
     end_date TIMESTAMP NOT NULL,
     status TINYINT(1) DEFAULT 1,  -- Boolean em MySQL
     company_id INT NOT NULL,
+    area_id INT NOT NULL,
+    city varchar(255) NOT NULL,
+    state_id varchar(255) NOT NULL,
+    publisehd_date date NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (company_id) REFERENCES company(id)
+    FOREIGN KEY (company_id) REFERENCES company(id),
+    FOREIGN KEY (state_id) REFERENCES state(id),
+    FOREIGN KEY (area_id) REFERENCES area(id)
+);
+
+--Tabela de área de trabalho
+CREATE TABLE area (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name varchar(255) NOT NULL
 );
 
 -- Tabela de candidatura (application)
@@ -191,3 +204,28 @@ CREATE TABLE course (
     FOREIGN KEY (thumbnail_id) REFERENCES course_thumbnail(id),
     FOREIGN KEY (modality_id) REFERENCES modality(id)
 );
+
+--Tabela de serviços oferecidos
+CREATE TABLE services (
+  id SERIAL PRIMARY KEY,
+  type VARCHAR(255) NOT NULL CHECK (type IN ('recruitment', 'in_company_training'))
+);
+
+--Tabela de pedido de orçamentos
+CREATE TABLE quotes (
+  id SERIAL PRIMARY KEY,
+  service_id INT NOT NULL,
+  first_name VARCHAR(255) NOT NULL,
+  last_name VARCHAR(255) NOT NULL,
+  company_name VARCHAR(255) NOT NULL,
+  position VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  state_id VARCHAR(255) NOT NULL,
+  phone VARCHAR(20) NOT NULL,
+  city VARCHAR(255) NOT NULL,
+  postal_code VARCHAR(20) NOT NULL,
+  FOREIGN KEY (state_id) REFERENCES state(id),
+  FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE
+);
+

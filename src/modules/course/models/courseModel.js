@@ -55,5 +55,5 @@ const courseModel = {
 module.exports = {
   courseImageModel,
   courseThumbnailModel,
-  courseModel
-}
+  courseModel,
+};
