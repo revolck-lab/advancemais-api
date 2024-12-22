@@ -207,25 +207,25 @@ CREATE TABLE course (
 
 --Tabela de serviços oferecidos
 CREATE TABLE services (
-  id SERIAL PRIMARY KEY,
-  type VARCHAR(255) NOT NULL CHECK (type IN ('recruitment', 'in_company_training'))
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(255) NOT NULL UNIQUE
 );
 
---Tabela de pedido de orçamentos
+# --Tabela de pedido de orçamentos
 CREATE TABLE quotes (
-  id SERIAL PRIMARY KEY,
-  service_id INT NOT NULL,
-  first_name VARCHAR(255) NOT NULL,
-  last_name VARCHAR(255) NOT NULL,
-  company_name VARCHAR(255) NOT NULL,
-  position VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  address VARCHAR(255) NOT NULL,
-  state_id VARCHAR(255) NOT NULL,
-  phone VARCHAR(20) NOT NULL,
-  city VARCHAR(255) NOT NULL,
-  postal_code VARCHAR(20) NOT NULL,
-  FOREIGN KEY (state_id) REFERENCES state(id),
-  FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    service_id INT NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    company_name VARCHAR(255) NOT NULL,
+    position VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    state_id INT NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    postal_code VARCHAR(20) NOT NULL,
+    FOREIGN KEY (state_id) REFERENCES state(id),
+    FOREIGN KEY (service_id) REFERENCES services(id)
 );
 
