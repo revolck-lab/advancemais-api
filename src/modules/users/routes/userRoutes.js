@@ -6,46 +6,46 @@ const authorization = require("../../../middlewares/middleware_roles/rolesMiddle
 const router = express.Router();
 
 router.get("/auth/welcome", (req, res) => {
-    res.status(200).json({ message: "Welcome!!" });
+  res.status(200).json({ message: "Welcome!!" });
 });
 
 router.post("/auth/login", userController.login);
 router.post("/auth/register", userController.register);
 
 router.get(
-    "/auth/permission/student",
-    authToken,
-    authorization.student,
-    (req, res) => {
-        res.json({ message: "Access granted: Student" });
-    }
+  "/auth/permission/student",
+  authToken,
+  authorization.student,
+  (req, res) => {
+    res.json({ message: "Access granted: Student" });
+  }
 );
 
 router.get(
-    "/auth/permission/teacher",
-    authToken,
-    authorization.teacher,
-    (req, res) => {
-        res.json({ message: "Access granted: Teacher" });
-    }
+  "/auth/permission/teacher",
+  authToken,
+  authorization.teacher,
+  (req, res) => {
+    res.json({ message: "Access granted: Teacher" });
+  }
 );
 
 router.get(
-    "/auth/permission/company",
-    authToken,
-    authorization.company,
-    (req, res) => {
-        res.json({ message: "Access granted: Company" });
-    }
+  "/auth/permission/company",
+  authToken,
+  authorization.company,
+  (req, res) => {
+    res.json({ message: "Access granted: Company" });
+  }
 );
 
 router.get(
-    "/auth/permission/admin",
-    authToken,
-    authorization.accessLevel(3),
-    (req, res) => {
-        res.json({ message: "Access granted: Admin" });
-    }
+  "/auth/permission/admin",
+  authToken,
+  authorization.accessLevel(3),
+  (req, res) => {
+    res.json({ message: "Access granted: Admin" });
+  }
 );
 
 module.exports = router;

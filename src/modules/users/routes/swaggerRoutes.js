@@ -1,8 +1,8 @@
 // src/modules/users/routes/index.js
-const express = require('express');
-const userController = require('../controllers/userController');
-const userValidation = require('../../validators/userValidation');
-const validate = require('../../middleware/validate');
+const express = require("express");
+const userController = require("../controllers/userController");
+const userValidation = require("../../validators/userValidation");
+const validate = require("../../middleware/validate");
 
 const router = express.Router();
 
@@ -32,7 +32,7 @@ const router = express.Router();
  *       400:
  *         description: Erro de validação
  */
-router.post('/register', validate(userValidation), userController.register);
+router.post("/register", validate(userValidation), userController.register);
 
 /**
  * @swagger
@@ -53,6 +53,6 @@ router.post('/register', validate(userValidation), userController.register);
  *       400:
  *         description: Dados de login inválidos
  */
-router.post('/login', userController.login);
+router.post("/login", userController.login);
 
 module.exports = router;

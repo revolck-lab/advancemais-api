@@ -26,6 +26,10 @@ const userModel = {
         const db = await knexInstance();
         return db('user').where({ id }).update(user);
     },
+    updatePassword: async (cpf, hashedPassword) => {
+        const db = await knexInstance();
+        return db('user').where({ cpf }).update({ password: hashedPassword });
+    },
     delete: async (id) => {
         const db = await knexInstance();
         return db('user').where({ id }).del();
