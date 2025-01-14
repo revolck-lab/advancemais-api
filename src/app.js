@@ -5,8 +5,8 @@ const { swaggerUi, swaggerDocs } = require('./config/swagger');
 const userRoutes = require('./modules/users/routes/userRoutes');
 const passwordResetRoutes = require('./modules/users/routes/passwordResetRoutes');
 const bannerRoutes = require('./modules/cms/routes/bannerRoutes');
-const carouselRoutes = require('./modules/course/routes/carouselRoutes');
-const carouselCompanyRoutes = require('./modules/course/routes/carousel_companyRoutes');
+const carouselRoutes = require('./modules/cms/routes/carouselRoutes');
+const carouselCompanyRoutes = require('./modules/cms/routes/carousel_companyRoutes');
 const authToken = require('./middlewares/authMiddleware');
 const authorization = require('./middlewares/middleware_roles/rolesMiddleware');
 
