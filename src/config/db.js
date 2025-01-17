@@ -3,11 +3,9 @@ const dotenv = require("dotenv");
 // Configura o dotenv
 dotenv.config({ path: "./src/config/env/.env.development" });
 
-let databaseInstance = null;
 // Função para criar uma instância do knex
 const connectDatabase = async () => {
-  if (!databaseInstance) {
-    databaseInstance = knex({
+    return databaseInstance = knex({
       client: "mysql2",
       connection: {
         host: process.env.DB_HOST,
@@ -19,8 +17,6 @@ const connectDatabase = async () => {
       },
       pool: { min: 2, max: 10 },
     });
-  }
-  return databaseInstance;
 };
 
 // Função para testar a conexão com o banco de dados
