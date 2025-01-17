@@ -27,24 +27,29 @@ const connectDatabase = async () => {
 const testDatabaseConnection = async (databaseInstance) => {
   try {
     await databaseInstance.raw("SELECT 1");
-    console.log("Database connected...");
+    console.log("Database connected successfully.");
   } catch (error) {
-    console.log("Database connection failed:", error.message);
+    console.error(`[ERROR] Failed to connect to database: ${error.message}`);
     throw new Error("Database connection failed");
   }
 };
 
 // Event Listener para fechamento seguro do banco
-process.on("exit", async () => {
+const closeDatabaseConnection = async () => {
   if (databaseInstance) {
     try {
       await databaseInstance.destroy();
-      console.log("Database connection closed gracefully on exit.");
+      console.log("Database connection closed gracefully.");
     } catch (error) {
       console.error("Error during database shutdown:", error.message);
     }
   }
-});
+};
+
+// Eventos de encerramento
+process.on("exit", closeDatabaseConnection);
+process.on("SIGINT", closeDatabaseConnection);
+process.on("SIGTERM", closeDatabaseConnection);
 
 module.exports = {
   connectDatabase,
