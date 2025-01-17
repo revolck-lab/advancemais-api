@@ -1,10 +1,10 @@
 const knex = require("knex");
 const dotenv = require("dotenv");
-
+// Configura o dotenv
 dotenv.config({ path: "./src/config/env/.env.development" });
 
 let databaseInstance = null;
-
+// Função para criar uma instância do knex
 const connectDatabase = async () => {
   if (!databaseInstance) {
     databaseInstance = knex({
@@ -17,29 +17,36 @@ const connectDatabase = async () => {
         port: process.env.DB_PORT,
         ssl: false,
       },
+      pool: { min: 2, max: 10 },
     });
-
-    try {
-      await databaseInstance.raw("SELECT 1");
-      console.log("Database connected...");
-      return { success: true, database: databaseInstance };
-    } catch (error) {
-      console.error("Database connection failed:", error.message);
-      return { success: false, message: "Database connection failed" };
-    }
   }
   return databaseInstance;
 };
 
-process.on("SIGINT", async () => {
+// Função para testar a conexão com o banco de dados
+const testDatabaseConnection = async (databaseInstance) => {
+  try {
+    await databaseInstance.raw("SELECT 1");
+    console.log("Database connected...");
+  } catch (error) {
+    console.log("Database connection failed:", error.message);
+    throw new Error("Database connection failed");
+  }
+};
+
+// Event Listener para fechamento seguro do banco
+process.on("exit", async () => {
   if (databaseInstance) {
     try {
       await databaseInstance.destroy();
-      console.log("Database connection closed");
+      console.log("Database connection closed gracefully on exit.");
     } catch (error) {
-      console.error("Error closing database connection:", error.message);
+      console.error("Error during database shutdown:", error.message);
     }
   }
 });
 
-module.exports = connectDatabase;
+module.exports = {
+  connectDatabase,
+  testDatabaseConnection,
+};
