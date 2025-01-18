@@ -19,7 +19,7 @@ const bannerController = {
         try {
             const { error } = bannerValidation.validate(banner);
             if (error) {
-                throw new Error(error.details[0].message);
+                return res.status(400).json({ error: error.details[0].message });
             }
 
             const banner = await bannerService.createBanner(req.body);
@@ -32,9 +32,9 @@ const bannerController = {
     },
     editBanner: async (req, res) => {
         try {
-            const { error } = bannerValidation.validate(banner);
+            const { error } = bannerValidation.validate(req.body);
             if (error) {
-                throw new Error(error.details[0].message);
+                return res.status(400).json({ error: error.details[0].message });
             }
 
             const { id } = req.params;

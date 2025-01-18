@@ -1,30 +1,29 @@
-const app = require('../app');
-const connectDatabase = require('./db');
-const validateEnvVariables = require('../utils/validatesEnv');
-const { verifyConnection } = require('../services/emailServices');
+const app = require("../app");
+const validateEnvVariables = require("../utils/validatesEnv");
+const { verifyConnection } = require("../services/emailServices");
+const { testDatabaseConnection } = require("./db");
 
 const startServer = async () => {
     try {
-        const variablesResult = await validateEnvVariables(['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_DATABASE', 'DB_PORT', 'JWT_SECRET', 'PORT', 'SMTP_HOST', 'SMTP_PASS', 'SMTP_PORT', 'SMTP_USER']);
-        if (!variablesResult.success) {
-            console.error(`Environment variable validation failed: ${variablesResult.message}`);
-            process.exit(1);
-        }
+        // Valida variáveis de ambiente necessárias
+        await validateEnvVariables([
+            "DB_HOST", "DB_USER", "DB_PASSWORD", "DB_DATABASE", "DB_PORT", 
+            "JWT_SECRET", 
+            "PORT", 
+            "SMTP_HOST", "SMTP_PASS", "SMTP_PORT", "SMTP_USER"
+        ]);
+        // Verifica conexão com o banco de dados
+        await testDatabaseConnection();
 
-        const dbStatus = await connectDatabase();
-        if (!dbStatus.success) {
-            console.error('Database connection failed:', dbStatus.error || 'Unknown error');
-            process.exit(1);
-        }
-        
+        // Verificar conexão com o serviço de email
         await verifyConnection();
 
-        const port = process.env.PORT;
-        app.listen(port, () => {
-            console.log('Server online');
+        // Inicializar o servidor
+        app.listen(process.env.PORT, () => {
+            console.log("Server Online");
         });
     } catch (error) {
-        console.error('Critical error during server initialization:', error);
+        console.error("Critical error during server initialization:", error);
         process.exit(1);
     }
 };
