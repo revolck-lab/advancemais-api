@@ -1,12 +1,13 @@
 const express = require('express');
 const carouselCompanyController = require('../controllers/carousel_companyController');
+const authorization = require('../../../middlewares/middleware_roles/rolesMiddleware');
 
 const router = express.Router();
 
-router.get('/carouselCompany', carouselCompanyController.getAllCarouselCompany);
-router.post('/carouselCompany', carouselCompanyController.createCarouselCompany);
-router.put('/carouselCompany/:id', carouselCompanyController.updateCarouselCompany);
-router.delete('/carouselCompany/:id', carouselCompanyController.deleteCarouselCompany);
-router.get('/carouselCompany/:id', carouselCompanyController.findByIdCompany);
+router.get('/', authorization.accessLevel(4), carouselCompanyController.getAllCarouselCompany);
+router.post('/', authorization.accessLevel(4),carouselCompanyController.createCarouselCompany);
+router.put('/:id', authorization.accessLevel(4),carouselCompanyController.updateCarouselCompany);
+router.delete('/:id', authorization.accessLevel(4),carouselCompanyController.deleteCarouselCompany);
+router.get('/:id', authorization.accessLevel(4),carouselCompanyController.findByIdCompany);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const knexInstance = require("../../../config/db");
+const { knexInstance } = require("../../../config/db");
 
 const carouselModel = {
   getAllCarousel: async () => {

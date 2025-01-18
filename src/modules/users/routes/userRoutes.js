@@ -5,15 +5,15 @@ const authorization = require("../../../middlewares/middleware_roles/rolesMiddle
 
 const router = express.Router();
 
-router.get("/auth/welcome", (req, res) => {
+router.get("/welcome", authToken, (req, res) => {
   res.status(200).json({ message: "Welcome!!" });
 });
 
-router.post("/auth/login", userController.login);
-router.post("/auth/register", userController.register);
+router.post("/login", userController.login);
+router.post("/register", userController.register);
 
 router.get(
-  "/auth/permission/student",
+  "/permission/student",
   authToken,
   authorization.student,
   (req, res) => {
@@ -22,7 +22,7 @@ router.get(
 );
 
 router.get(
-  "/auth/permission/teacher",
+  "/permission/teacher",
   authToken,
   authorization.teacher,
   (req, res) => {
@@ -31,7 +31,7 @@ router.get(
 );
 
 router.get(
-  "/auth/permission/company",
+  "/permission/company",
   authToken,
   authorization.company,
   (req, res) => {
@@ -40,7 +40,7 @@ router.get(
 );
 
 router.get(
-  "/auth/permission/admin",
+  "/permission/admin",
   authToken,
   authorization.accessLevel(3),
   (req, res) => {

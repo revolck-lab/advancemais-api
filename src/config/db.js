@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./src/config/env/.env.development" });
 
 // Função para criar uma instância do knex
-const connectDatabase = async () => {
+const knexInstance = async () => {
     return databaseInstance = knex({
       client: "mysql2",
       connection: {
@@ -20,8 +20,9 @@ const connectDatabase = async () => {
 };
 
 // Função para testar a conexão com o banco de dados
-const testDatabaseConnection = async (databaseInstance) => {
+const testDatabaseConnection = async () => {
   try {
+    const databaseInstance = await knexInstance();
     await databaseInstance.raw("SELECT 1");
     console.log("Database connected successfully.");
   } catch (error) {
@@ -48,6 +49,6 @@ process.on("SIGINT", closeDatabaseConnection);
 process.on("SIGTERM", closeDatabaseConnection);
 
 module.exports = {
-  connectDatabase,
+  knexInstance,
   testDatabaseConnection,
 };

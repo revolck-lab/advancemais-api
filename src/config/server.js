@@ -1,7 +1,7 @@
 const app = require("../app");
 const validateEnvVariables = require("../utils/validatesEnv");
 const { verifyConnection } = require("../services/emailServices");
-const { testDatabaseConnection, connectDatabase } = require("./db");
+const { testDatabaseConnection } = require("./db");
 
 const startServer = async () => {
     try {
@@ -12,12 +12,8 @@ const startServer = async () => {
             "PORT", 
             "SMTP_HOST", "SMTP_PASS", "SMTP_PORT", "SMTP_USER"
         ]);
-
-        // Conectar ao banco de dados
-        const Instance = await connectDatabase();
-
         // Verifica conexão com o banco de dados
-        await testDatabaseConnection(Instance);
+        await testDatabaseConnection();
 
         // Verificar conexão com o serviço de email
         await verifyConnection();

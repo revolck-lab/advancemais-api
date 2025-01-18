@@ -1,4 +1,4 @@
-const knexInstance = require("../../../config/db");
+const { knexInstance } = require("../../../config/db");
 
 const bannerModel = {
   getBanners: async () => {
