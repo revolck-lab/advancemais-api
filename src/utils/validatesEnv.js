@@ -1,16 +1,14 @@
-const validateEnvVariables = (async = (envVars = []) => {
-  const defaultrequiredEnvVariables = [
-    "DB_HOST",
-    "DB_USER",
-    "DB_PASSWORD",
-    "DB_DATABASE",
-    "DB_PORT",
-    "PORT",
+const validateEnvVariables = async (envVars = []) => {
+  const defaultRequiredEnvVariables = [
+    "DB_HOST", "DB_USER", "DB_PASSWORD", "DB_DATABASE", "DB_PORT",
     "JWT_SECRET",
+    "PORT",
+    "SMTP_HOST", "SMTP_PASS", "SMTP_PORT", "SMTP_USER",
   ];
+
   const requiredEnvVariables = envVars.length
     ? envVars
-    : defaultrequiredEnvVariables;
+    : defaultRequiredEnvVariables;
 
   const missingVars = requiredEnvVariables.filter(
     (varName) => !process.env[varName]
@@ -24,7 +22,8 @@ const validateEnvVariables = (async = (envVars = []) => {
       )}`,
     };
   }
+
   return { success: true, message: "All environment variables are set." };
-});
+};
 
 module.exports = validateEnvVariables;

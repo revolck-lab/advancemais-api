@@ -8,7 +8,7 @@ const recoveryService = async (login, email) => {
 
   const resetToken = generatePasswordResetToken(login);
 
-  const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
+  const resetLink = `${process.env.FRONTEND_URL}/api/password/reset?token=${resetToken}`;
 
   const emailResult = await sendEmail({
     to: email,

@@ -1,4 +1,4 @@
-const knexInstance = require('../../../config/db');
+const { knexInstance } = require('../../../config/db');
 
 const userModel = {
     create: async (user) => {
@@ -26,9 +26,9 @@ const userModel = {
         const db = await knexInstance();
         return db('user').where({ id }).update(user);
     },
-    updatePassword: async (cpf, hashedPassword) => {
+    updatePassword: async (id, hashedPassword) => {
         const db = await knexInstance();
-        return db('user').where({ cpf }).update({ password: hashedPassword });
+        return db('user').where({ id }).update({ password: hashedPassword });
     },
     delete: async (id) => {
         const db = await knexInstance();

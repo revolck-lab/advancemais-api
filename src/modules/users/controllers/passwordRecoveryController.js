@@ -3,7 +3,6 @@ const userModel = require("../models/userModel");
 const companyModel = require("../models/companyModel");
 const loginValidation = require("../validators/loginValidator");
 const bcrypt = require("bcrypt");
-const { verifyToken } = require("../../../services/tokenService");
 
 const recoveryController = {
   requestPasswordRecovery: async (req, res) => {
@@ -48,24 +47,18 @@ const recoveryController = {
 
   resetPassword: async (req, res) => {
     try {
-      const { token } = req.params;
+      const { id } = req.user;
       const { newPassword } = req.body;
-
+      
       if (!newPassword) {
-        return res.status(400).json({ message: "Password required" });
+        return res.status(400).json({ message: "Password required." });
       }
 
-      const decoded = verifyToken(token);
-      const login = decoded.cpf || decoded.cnpj;
-
-      if (!login) {
+      if (!id) {
         return res.status(400).json({ message: "Invalid token." });
       }
 
-      const user =
-        login.length > 11
-          ? await companyModel.findByCnpj(login)
-          : await userModel.findByCpf(login);
+      const user = await userModel.findById(id);
 
       if (!user) {
         return res.status(404).json({ message: "User not found" });
@@ -73,19 +66,12 @@ const recoveryController = {
 
       const isSamePassword = await bcrypt.compare(newPassword, user.password);
       if (isSamePassword) {
-        return res
-          .status(400)
-          .json({
-            message: "The new password cannot be the same as the old one.",
-          });
+        return res.status(400).json({ message: "The new password cannot be the same as the old one." });
       }
 
       const hashedPassword = await bcrypt.hash(newPassword, 10);
-      if (login.length > 11) {
-        await companyModel.updatePassword(login, hashedPassword);
-      } else {
-        await userModel.updatePassword(login, hashedPassword);
-      }
+      
+      await userModel.updatePassword(id, hashedPassword);
 
       return res
         .status(200)
@@ -94,7 +80,8 @@ const recoveryController = {
       if (error.name === "TokenExpiredError") {
         return res.status(401).json({ message: "Expired token" });
       }
-      return res.status(500).json({ message: "Internal error server." });
+      console.error("Reset password error:", error.message);
+      return res.status(500).json({ message: "Internal error server.", error: error.message });
     }
   },
 };
