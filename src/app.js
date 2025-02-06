@@ -24,7 +24,7 @@ const app = express();
 // Configura o middleware CORS
 app.use(cors({
     // Adicione os domínios permitidos
-    origin: ["http://localhost:3000", "https://advancemais-front.vercel.app"],
+    origin: ["http://localhost:3000", "https://advancemais.vercel.app/"],
     // Métodos HTTP permitidos
     methods: ["GET", "POST", "PUT", "DELETE"],
     // Cabeçalhos permitidos
