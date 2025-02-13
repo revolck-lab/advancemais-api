@@ -1,7 +1,7 @@
 const { knexInstance } = require("../../../config/db");
 
 const bannerModel = {
-  getBanners: async () => {
+  getAllBanners: async () => {
     const db = await knexInstance();
     return db("banner").select("*");
   },
@@ -18,7 +18,7 @@ const bannerModel = {
     const db = await knexInstance();
     return db("banner").where({ id }).del();
   },
-  findById: async (id) => {
+  getBannerById: async (id) => {
     const db = await knexInstance();
     return db("banner").where({ id }).first();
   },
