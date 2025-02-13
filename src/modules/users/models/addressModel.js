@@ -1,4 +1,4 @@
-const knexInstance = require('../../../config/db');
+const { knexInstance } = require('../../../config/db');
 
 const addressModel = {
     create: async (addressData) => {
