@@ -133,13 +133,27 @@ CREATE TABLE application (
 
 -- Tabela de banner
 CREATE TABLE banner (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    banner_url VARCHAR(255) NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    id INT AUTO_INCREMENT PRIMARY KEY, -- Chave primária
+    image_url TEXT NOT NULL,           -- Caminho da URL
+    title VARCHAR(255) NOT NULL,       -- Título fornecido pelo usuário
+    device ENUM('Web', 'Mobile') NOT NULL, -- Dispositivo (Web ou Mobile)
+    url_link text not null,
+    author_id INT NOT NULL,            -- ID do autor que criou/alterou
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Data de criação automática
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Data de atualização automática
+    FOREIGN KEY (author_id) REFERENCES user(id) -- Referência à tabela de usuários
 );
+
+CREATE TRIGGER limitar_banner
+BEFORE INSERT ON banner
+FOR EACH ROW
+BEGIN
+    -- Verifica se o número de registros já é igual ou maior que 10
+    IF (SELECT COUNT(*) FROM banner) >= 10 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Limite de 10 registros atingido na tabela banner.';
+    END IF;
+END;
 
 -- Tabela de carrossel de empresas (carousel_company)
 CREATE TABLE carousel_company (
@@ -229,3 +243,62 @@ CREATE TABLE quotes (
     FOREIGN KEY (service_id) REFERENCES services(id)
 );
 
+CREATE TABLE slider (
+    id INT AUTO_INCREMENT PRIMARY KEY, -- Chave primária
+    image_url TEXT NOT NULL,           -- Caminho da URL
+    title VARCHAR(255) NOT NULL,       -- Título fornecido pelo usuário
+    device ENUM('Web', 'Mobile') NOT NULL, -- Dispositivo (Web ou Mobile)
+    url_link text not null,
+    author_id INT NOT NULL,            -- ID do autor que criou/alterou
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Data de criação automática
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Data de atualização automática
+    FOREIGN KEY (author_id) REFERENCES user(id) -- Referência à tabela de usuários
+);
+
+CREATE TRIGGER limitar_slider
+BEFORE INSERT ON slider
+FOR EACH ROW
+BEGIN
+    -- Verifica se o número de registros já é igual ou maior que 10
+    IF (SELECT COUNT(*) FROM slider) >= 10 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Limite de 10 registros atingido na tabela slider.';
+    END IF;
+END;
+
+CREATE TABLE smtp (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  smtp_host VARCHAR(255) NOT NULL,
+  smtp_port INT NOT NULL,
+  smtp_username VARCHAR(255) NOT NULL,
+  smtp_password VARCHAR(255) NOT NULL,
+  author_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_author
+    FOREIGN KEY (author_id)
+    REFERENCES user(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE business_info (
+    id INT AUTO_INCREMENT PRIMARY KEY, -- Chave primária
+    title VARCHAR(255) NOT NULL,       -- Título do negócio
+    description TEXT NOT NULL,         -- Descrição do negócio
+    image_url TEXT NOT NULL,           -- URL da imagem no bucket
+    author_id INT NOT NULL,            -- ID do autor (referência à tabela user)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Data de criação automática
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Data de atualização automática
+    FOREIGN KEY (author_id) REFERENCES user(id) -- Chave estrangeira para a tabela user
+);
+
+CREATE TABLE site_info (
+    id INT AUTO_INCREMENT PRIMARY KEY, -- Chave primária
+    favicon_url TEXT NOT NULL,         -- URL do favicon
+    site_name VARCHAR(255) NOT NULL,    -- Nome do site
+  	author_id INT NOT NULL,            -- ID do autor (referência à tabela user)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Data de criação automática
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Data de atualização automática
+    FOREIGN KEY (author_id) REFERENCES user(id) -- Chave estrangeira para a tabela user
+);

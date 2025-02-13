@@ -24,9 +24,9 @@ const testDatabaseConnection = async () => {
   try {
     const databaseInstance = await knexInstance();
     await databaseInstance.raw("SELECT 1");
-    console.log("Database connected successfully.");
+    console.log("✅ Database connected successfully.");
   } catch (error) {
-    console.error(`[ERROR] Failed to connect to database: ${error.message}`);
+    console.error(`❌ [ERROR] Failed to connect to database: ${error.message}`);
     throw new Error("Database connection failed");
   }
 };
@@ -36,9 +36,9 @@ const closeDatabaseConnection = async () => {
   if (databaseInstance) {
     try {
       await databaseInstance.destroy();
-      console.log("Database connection closed gracefully.");
+      console.log("✅ Database connection closed gracefully.");
     } catch (error) {
-      console.error("Error during database shutdown:", error.message);
+      console.error("❌ Error during database shutdown:", error.message);
     }
   }
 };
