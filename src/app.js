@@ -14,6 +14,8 @@ const courseRoutes = require("./modules/course/routes/courseRoutes");
 const vacanciesRoutes = require("./modules/vacancies/routes/vacanciesRoutes");
 const businessRoutes = require("./modules/cms/routes/business_informationRoutes");
 const superAdminRoutes = require("./modules/cms/routes/superAdminRoutes");
+// const subscriptionRoutes = require('./modules/subscriptionRoutes');
+
 //Middleware
 const authToken = require("./middlewares/authMiddleware");
 // const Authorization = require("./middlewares/middleware_roles/rolesMiddleware");
@@ -49,5 +51,6 @@ app.use("/api/carouselCompany", carouselCompanyRoutes);
 app.use("/api/slider", sliderRoutes);
 app.use("/api/superAdmin", superAdminRoutes);
 app.use("/api/business_info", businessRoutes);
+// app.use('/api', subscriptionRoutes);
 
 module.exports = app;
