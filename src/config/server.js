@@ -2,6 +2,7 @@ const app = require("../app");
 const validateEnvVariables = require("../utils/validatesEnv");
 const { verifyConnection } = require("../services/emailServices");
 const { testDatabaseConnection } = require("./db");
+const { testConnectionMercadoPago } = require('../services/mercadoPagoService');
 
 const startServer = async () => {
     try {
@@ -18,6 +19,8 @@ const startServer = async () => {
 
         // Verificar conexão com o serviço de email
         await verifyConnection();
+
+        await testConnectionMercadoPago(); 
 
         // Inicializar o servidor
         app.listen(process.env.PORT, () => {
