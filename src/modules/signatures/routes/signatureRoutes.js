@@ -5,10 +5,10 @@ const authToken = require('../../../middlewares/authMiddleware');
 
 const router = express.Router();
 
-router.get('/', signaturePackageController.getAllSignaturePackages);
-router.get('/:id', signaturePackageController.findByIdSignaturePackage);
-router.post('/', authToken, authorization.accessLevel(4), signaturePackageController.createSignaturePackage);
-router.put('/:id', authToken, authorization.accessLevel(4), signaturePackageController.updateSignaturePackage);
-router.delete('/:id', authToken, authorization.accessLevel(4), signaturePackageController.deleteSignaturePackage);
+router.get('/', signaturePackageController.getAllPackages);
+router.get('/:id', signaturePackageController.getPackageDetails);
+router.post('/', authToken, authorization.accessLevel(4), signaturePackageController.createPackage);
+router.put('/:id', authToken, authorization.accessLevel(4), signaturePackageController.updatePackage);
+router.delete('/:id', authToken, authorization.accessLevel(4), signaturePackageController.deletePackage);
 
 module.exports = router;

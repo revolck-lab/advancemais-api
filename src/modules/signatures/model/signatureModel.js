@@ -50,5 +50,5 @@ const signatureModel = {
 
 module.exports = {
   signaturePackageModel,
-  signature,
+  signatureModel,
 };

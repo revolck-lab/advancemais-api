@@ -1,4 +1,4 @@
-const errorMessagePackage = {
+const errorMessagePackage = () => ({
   name: {
     required: 'The "name" field is required',
     empty: 'The "name" field cannot be empty',
@@ -16,11 +16,12 @@ const errorMessagePackage = {
   periodicity: {
     required: 'The "periodicity" field is required',
     invalid: 'The "periodicity" field must be a valid periodicity type',
+    empty: 'The "periodicity" field cannot be empty',
   },
   featured: {
     required: 'The "featured" field is required',
     invalid: 'The "featured" field must be a valid boolean value',
   },
-};
+});
 
 module.exports = errorMessagePackage;
