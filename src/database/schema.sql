@@ -302,3 +302,28 @@ CREATE TABLE site_info (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Data de atualização automática
     FOREIGN KEY (author_id) REFERENCES user(id) -- Chave estrangeira para a tabela user
 );
+
+-- catálogo de assinaturas
+CREATE TABLE subscription_packages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    vacancy_limit INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    periodicity VARCHAR(20) NOT NULL DEFAULT 'monthly',
+    featured BOOLEAN DEFAULT FALSE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+-- assinaturas das empresas 
+CREATE TABLE subscriptions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT NOT NULL,
+    package_id INT NOT NULL,
+    start_date DATETIME NOT NULL,
+    end_date DATETIME,
+    status ENUM('active', 'canceled', 'expired') DEFAULT 'active',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES company(id),
+    FOREIGN KEY (package_id) REFERENCES subscription_packages(id)
+);
