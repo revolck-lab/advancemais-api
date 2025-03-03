@@ -302,3 +302,24 @@ CREATE TABLE site_info (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Data de atualização automática
     FOREIGN KEY (author_id) REFERENCES user(id) -- Chave estrangeira para a tabela user
 );
+
+CREATE TABLE company_payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT NOT NULL,                        -- Referencia a tabela company
+    package_id INT NOT NULL,                        -- Referencia a tabela signatures_packages
+    mp_preference_id VARCHAR(50) NOT NULL,          -- ID da preferência do Mercado Pago
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',  -- Status da transação (ex.: PENDING, APPROVED, CANCELLED)
+    start_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Data de início da transação
+    end_date TIMESTAMP,                             -- Data de conclusão ou expiração (opcional)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp de criação
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Timestamp de atualização
+
+    -- Chaves estrangeiras
+    FOREIGN KEY (company_id) REFERENCES company(id) ON DELETE CASCADE,
+    FOREIGN KEY (package_id) REFERENCES signatures_packages(id) ON DELETE CASCADE
+);
+
+-- Índices para otimizar consultas
+CREATE INDEX idx_company_id ON company_payments(company_id);
+CREATE INDEX idx_package_id ON company_payments(package_id);
+CREATE INDEX idx_mp_preference_id ON company_payments(mp_preference_id);
