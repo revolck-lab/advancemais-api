@@ -1,15 +1,8 @@
-const mercadopago = require('../../../config/mercadoPago');
+const mercadopago = require('../../../services/mercadoPagoService');
 const paymentsModel = require('../models/paymentsModel');
-const Joi = require('joi');
 
 // 🔹 Criar um pagamento com Mercado Pago
 const createPayment = async (data) => {
-  // Validação dos dados de entrada
-  const { error, value } = paymentSchema.validate(data);
-  if (error) throw new Error(error.details[0].message);
-
-  const { companyId, packageId } = value;
-
   // Criar preferência de pagamento no Mercado Pago
   const preference = {
     items: [

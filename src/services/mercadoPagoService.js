@@ -14,7 +14,7 @@ const userClient = new User(client);
 const testConnectionMercadoPago = async () => {
     try {
         const response = await userClient.get();
-        console.log("Conexão com Mercado Pago bem-sucedida:");
+        console.log("✅ Conexão com Mercado Pago bem-sucedida:");
         return response;
     } catch (error) {
         console.error('Erro ao conectar ao Mercado Pago:', error);
