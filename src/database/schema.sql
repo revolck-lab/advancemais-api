@@ -308,6 +308,7 @@ CREATE TABLE company_payments (
     company_id INT NOT NULL,                        -- Referencia a tabela company
     package_id INT NOT NULL,                        -- Referencia a tabela signatures_packages
     mp_preference_id VARCHAR(50) NOT NULL,          -- ID da preferência do Mercado Pago
+    payment_id VARCHAR(50) NULL
     status VARCHAR(20) NOT NULL DEFAULT 'PENDING',  -- Status da transação (ex.: PENDING, APPROVED, CANCELLED)
     start_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Data de início da transação
     end_date TIMESTAMP,                             -- Data de conclusão ou expiração (opcional)
@@ -323,3 +324,4 @@ CREATE TABLE company_payments (
 CREATE INDEX idx_company_id ON company_payments(company_id);
 CREATE INDEX idx_package_id ON company_payments(package_id);
 CREATE INDEX idx_mp_preference_id ON company_payments(mp_preference_id);
+CREATE INDEX idx_payment_id ON company_payments(payment_id);

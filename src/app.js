@@ -1,8 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-//Documentação swagger
 const { swaggerUi, swaggerDocs } = require("./config/swagger");
-//Rotas
 const userRoutes = require("./modules/users/routes/userRoutes");
 const passwordResetRoutes = require("./modules/users/routes/passwordResetRoutes");
 const bannerRoutes = require("./modules/cms/routes/bannerRoutes");
@@ -15,21 +13,16 @@ const vacanciesRoutes = require("./modules/vacancies/routes/vacanciesRoutes");
 const businessRoutes = require("./modules/cms/routes/business_informationRoutes");
 const superAdminRoutes = require("./modules/cms/routes/superAdminRoutes");
 const paymentRoutes = require("./modules/mercadoPago/routes/paymentsRoute");
-// const subscriptionRoutes = require('./modules/subscriptionRoutes');
-
-//Middleware
 const authToken = require("./middlewares/authMiddleware");
-// const Authorization = require("./middlewares/middleware_roles/rolesMiddleware");
 
 const app = express();
-// Configura o middleware CORS
+
+// Configuração do CORS
 app.use(cors({
-    // Adicione os domínios permitidos
     origin: ["http://localhost:3000", "https://advancemais.vercel.app"],
-    // Métodos HTTP permitidos
     methods: ["GET", "POST", "PUT", "DELETE"],
-    // Cabeçalhos permitidos
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // Permite envio de cookies, se necessário
 }));
 
 app.use(express.json());
@@ -40,10 +33,13 @@ app.use("/api/password", passwordResetRoutes);
 app.use("/api/budget", budgetRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Middleware de autenticação
+// Rota específica do webhook (sem autenticação)
+app.use("/api/mercadoPago/checkout/webhook", paymentRoutes);
+
+// Middleware de autenticação para outras rotas protegidas
 app.use(authToken);
 
-// Rotas protegidas com níveis de autorização
+// Rotas protegidas
 app.use("/api/course", courseRoutes);
 app.use("/api/vacancy", vacanciesRoutes);
 app.use("/api/banner", bannerRoutes);
@@ -53,6 +49,16 @@ app.use("/api/slider", sliderRoutes);
 app.use("/api/superAdmin", superAdminRoutes);
 app.use("/api/business_info", businessRoutes);
 app.use("/api/mercadoPago", paymentRoutes);
-// app.use('/api', subscriptionRoutes);
+
+// Tratamento de rotas não encontradas
+app.use((req, res) => {
+    res.status(404).json({ error: "Rota não encontrada" });
+});
+
+// Tratamento de erros genéricos
+app.use((err, req, res, next) => {
+    console.error("Erro no servidor:", err.stack);
+    res.status(500).json({ error: "Erro interno do servidor" });
+});
 
 module.exports = app;
