@@ -37,17 +37,17 @@ const signaturePackageController = {
 
   updatePackage: async (req, res) => {
     try {
-      const { id } = req.params;
-      const { error } = await packageValidation.validate(req, res);
+      const { empresaId } = req.params;
+      const { error } = packageValidation.validate(req.body);
+
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
       }
 
-      const updatedPackage = req.body;
-      await signatureService.updatePackage(id, updatedPackage);
-      res.status(200).json({ message: 'Package updated successfully' });
+      const response = await signatureService.upgradeDowngradePackage(empresaId, value.novoPacoteId);
+      return res.status(200).json(response);
     } catch (error) {
-      res.status(404).json({ error: 'Package not found' });
+      return res.status(400).json({ error: error.message });
     }
   },
 
