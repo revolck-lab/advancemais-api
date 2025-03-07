@@ -119,6 +119,15 @@ const signatureController = {
       res.status(404).json({ error: 'Signature not found' });
     }
   },
+  cancelSignatureCompany: async (req, res) => {
+    try {
+      const { companyId } = req.params;
+      const response = await signatureService.cancelSignature(companyId);
+      return res.status(200).json(response);
+    } catch (error) {
+      return res.status(404).json({ error: error.message });
+    }
+  },
 }
 
 module.exports = {

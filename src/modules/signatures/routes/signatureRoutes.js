@@ -14,7 +14,8 @@ router.delete('/package/:id', authToken, authorization.accessLevel(4), signature
 router.get('/', authToken, authorization.accessLevel(4), signatureController.getAllSignatures);
 router.get('/:id', authToken, authorization.accessLevel(4), signatureController.getSignatureDetails);
 router.post('/', authToken, authorization.accessLevel(4), signatureController.createSignature);
-router.put('/:id', authToken, authorization.accessLevel(4), signatureController.updateSignature);
-router.delete('/:id', authToken, authorization.accessLevel(4), signatureController.deleteSignature);
+router.put('/update/:id', authToken, authorization.accessLevel(4), signatureController.updateSignature);
+router.delete('/delete/:id', authToken, authorization.accessLevel(4), signatureController.deleteSignature);
+router.put('/cancel/:id', authToken, authorization.accessLevel(4), signatureController.cancelSignatureCompany);
 
 module.exports = router;

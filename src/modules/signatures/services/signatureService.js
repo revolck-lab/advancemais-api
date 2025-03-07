@@ -1,4 +1,4 @@
-const signaturePackage = require('../model/signatureModel');
+const { signaturePackage, signatureModel } = require('../model/signatureModel');
 
 const signaturePackageService = {
   getSignature: async () => {
@@ -20,6 +20,16 @@ const signaturePackageService = {
   deleteSignature: async (id) => {
     await signaturePackage.deleteSignature(id);
     return true;
+  },
+  cancelSignature: async (companyId) => {
+    signature = await signatureModel.getSignatureById(companyId);
+
+    if (signatureModel) {
+      throw new Error("Subscription not found or already canceled");
+    }
+
+    await signatureModel.cancelSignature(companyId)
+    return { message: "Subscription successfully cancelled" };
   }
 };
 

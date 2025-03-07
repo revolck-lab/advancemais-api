@@ -1,4 +1,5 @@
 const { knexInstance } = require('../../../config/db');
+const { company } = require('../../../middlewares/middleware_roles/rolesMiddleware');
 
 const signaturePackageModel = {
   getAllSignature: async () => {
@@ -45,6 +46,14 @@ const signatureModel = {
   deleteSignature: async (id) => {
     const db = await knexInstance();
     return db('signatures').where({ id }).del();
+  },
+  cancelSignature: async (id) => {
+    const db = await knexInstance();
+    return db('signatures').where({ company_id: id, status: "active" })
+    .update({
+      status: "canceled",
+      cancellation_date: knex.fn.now(),
+    });
   },
 };
 

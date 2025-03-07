@@ -322,6 +322,7 @@ CREATE TABLE signatures (
     start_date DATETIME NOT NULL,
     end_date DATETIME,
     status ENUM('active', 'canceled', 'expired') DEFAULT 'active',
+    cancellation_date DATETIME NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (company_id) REFERENCES company(id),
