@@ -12,7 +12,14 @@ const courseRoutes = require("./modules/course/routes/courseRoutes");
 const vacanciesRoutes = require("./modules/vacancies/routes/vacanciesRoutes");
 const businessRoutes = require("./modules/cms/routes/business_informationRoutes");
 const superAdminRoutes = require("./modules/cms/routes/superAdminRoutes");
+const signatureRoutes = require("./modules/signatures/routes/signatureRoutes");
+
+// const subscriptionRoutes = require('./modules/subscriptionRoutes');
+
+//Middleware
+=======
 const paymentRoutes = require("./modules/mercadoPago/routes/paymentsRoute");
+
 const authToken = require("./middlewares/authMiddleware");
 
 const app = express();
@@ -48,6 +55,9 @@ app.use("/api/carouselCompany", carouselCompanyRoutes);
 app.use("/api/slider", sliderRoutes);
 app.use("/api/superAdmin", superAdminRoutes);
 app.use("/api/business_info", businessRoutes);
+app.use("/api/signatures", signatureRoutes);
+// app.use('/api', subscriptionRoutes);
+=======
 app.use("/api/mercadoPago", paymentRoutes);
 
 // Tratamento de rotas não encontradas
