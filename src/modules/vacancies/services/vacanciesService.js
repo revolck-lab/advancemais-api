@@ -35,6 +35,22 @@ const vacanciesService = {
   getVacancyDetails: async (id) => {
     return await vacancyModel.findById(id);
   },
+
+  getVacancyDetailsCompany: async (company_id) => {
+    return await vacancyModel.findByCompanyId(company_id);
+  },
+
+  deleteVacancy: async (id) => {
+    return await vacancyModel.delete(id);
+  },
+
+  updateVacancy: async (id, vacancyData) => {
+    return await vacancyModel.update(id, vacancyData);
+  },
+
+  createVacancy: async (companyId) => {
+    return await vacancyModel.create(companyId);
+  },
 };
 
 module.exports = vacanciesService;

@@ -102,7 +102,7 @@ CREATE TABLE vacancy (
     notes VARCHAR(255),
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
-    status TINYINT(1) DEFAULT 1,  -- Boolean em MySQL
+    status ENUM('active', 'canceled', 'expired', 'under review'),
     company_id INT NOT NULL,
     area_id INT NOT NULL,
     city varchar(255) NOT NULL,
