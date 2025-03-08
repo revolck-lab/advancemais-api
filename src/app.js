@@ -17,7 +17,7 @@ const signatureRoutes = require("./modules/signatures/routes/signatureRoutes");
 // const subscriptionRoutes = require('./modules/subscriptionRoutes');
 
 //Middleware
-=======
+
 const paymentRoutes = require("./modules/mercadoPago/routes/paymentsRoute");
 
 const authToken = require("./middlewares/authMiddleware");
@@ -57,7 +57,7 @@ app.use("/api/superAdmin", superAdminRoutes);
 app.use("/api/business_info", businessRoutes);
 app.use("/api/signatures", signatureRoutes);
 // app.use('/api', subscriptionRoutes);
-=======
+
 app.use("/api/mercadoPago", paymentRoutes);
 
 // Tratamento de rotas não encontradas
