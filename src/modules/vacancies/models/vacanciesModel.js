@@ -1,4 +1,5 @@
-const { knexInstance } = require("../../../config/db");
+const knexInstance = require("../../../config/db");
+const { createVacancy } = require("../controllers/vacanciesController");
 
 const vacancyModel = {
   list: async (filters, limit, offset) => {
@@ -43,6 +44,21 @@ const vacancyModel = {
       .join("company", "vacancy.company_id", "=", "company.id")
       .where("vacancy.id", id)
       .first();
+  },
+
+  delete: async (id) => {
+    const db = await knexInstance();
+    return db("vacancy").where({ id }).del();
+  },
+
+  update: async (id, vacancyData) => {
+    const db = await knexInstance();
+    return db("vacancy").where({ id }).update(vacancyData);
+  },
+
+  create: async (id) => {
+    const db = await knexInstance();
+    return db("vacancy").insert({ company_id: id });
   },
 };
 

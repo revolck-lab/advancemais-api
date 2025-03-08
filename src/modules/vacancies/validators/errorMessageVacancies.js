@@ -21,9 +21,6 @@ const errorMessageVacancy = () => ({
     greater: "The end date must be later than the start date.",
     required: "The end date is required.",
   },
-  status: {
-    base: "The status must be a boolean.",
-  },
   company_id: {
     base: "The company ID must be a valid number.",
     required: "The company ID is required.",
