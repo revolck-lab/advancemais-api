@@ -48,4 +48,12 @@ const updatePaymentStatus = async (paymentId, status) => {
   return paymentsModel.updatePaymentByPaymentId(paymentId, status);
 };
 
-module.exports = { createPayment, updatePaymentStatus };
+const getAllPayments = async () => {
+  return paymentsModel.getAllPayments();
+};
+
+const getPaymentByCompany = async (company_id) => {
+  return paymentsModel.getPaymentByCompany(company_id);
+};
+
+module.exports = { createPayment, updatePaymentStatus, getAllPayments, getPaymentByCompany };

@@ -26,9 +26,14 @@ const paymentsModel = {
     return db('company_payments').where({ id }).first();
   },
 
-  getPaymentByPreferenceId: async (mpPreferenceId) => {
+  getAllPayments: async () => {
     const db = await knexInstance();
-    return db('company_payments').where({ mp_preference_id: mpPreferenceId }).first();
+    return db('company_payments').select('*');
+  },
+
+  getPaymentByCompany: async (company_id) => {
+    const db = await knexInstance();
+    return db('company_payments').where({ company_id: company_id }).first();
   },
 };
 

@@ -2,12 +2,31 @@ const mercadopago = require('../../../services/mercadoPagoService');
 const paymentsModel = require('../models/paymentsModel');
 const paymentsService = require('../services/paymentsService');
 
-const createPayment = async (req, res) => {
-  try {
-    const payment = await paymentsService.createPayment(req.body);
-    return res.json(payment);
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
+const paymentsController = () => {
+  createPayment = async (req, res) => {
+    try {
+      const payment = await paymentsService.createPayment(req.body);
+      return res.json(payment);
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
+    }
+  },
+  getAllPayments = async (req, res) => {
+    try {
+      const payments = await paymentsService.getAllPayments();
+      return res.json(payments);
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  },
+  getPaymentByCompany = async (req, res) => {
+    try {
+      const { company_id } = req.params;
+      const payments = await paymentsService.getPaymentByCompany(company_id);
+      return res.json(payments);
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
   }
 };
 
@@ -38,4 +57,4 @@ const webhookHandler = async (req, res) => {
   }
 };
 
-module.exports = { createPayment, webhookHandler };
+module.exports = { paymentsController, webhookHandler };
