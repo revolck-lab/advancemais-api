@@ -1,12 +1,13 @@
 const express = require('express');
 const authToken = require('../../../middlewares/authMiddleware');
 const authorization = require('../../../middlewares/middleware_roles/rolesMiddleware');
-const { validatePayment } = require('../validators/paymentValidator');
-const { createPayment, webhookHandler } = require('../controllers/paymentsController');
+const { paymentsController, webhookHandler } = require('../controllers/paymentsController');
 
 const router = express.Router();
 
-router.post('/checkout', authToken, authorization.accessLevel(3), validatePayment, createPayment);
+router.get('/payment', authToken, authorization.accessLevel(3,7,8), paymentsController.getAllPayments);
+router.get('/company/:company_id', authToken, authorization.accessLevel(3,7,8), paymentsController.getPaymentByCompany);
+router.post('/payment', authToken, authorization.accessLevel(3,7,8), paymentsController.createPayment);
 
 router.post('/checkout/webhook', (req, res, next) => {
   const secret = req.query.secret || req.body.secret;

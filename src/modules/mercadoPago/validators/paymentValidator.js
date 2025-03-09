@@ -13,4 +13,4 @@ const validatePayment = (req, res, next) => {
   next();
 };
 
-module.exports = { validatePayment };
+module.exports = validatePayment;
