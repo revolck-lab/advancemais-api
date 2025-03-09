@@ -15,7 +15,17 @@ const createPayment = async ({ company_id, package_id }) => {
         currency_id: 'BRL',
       },
     ],
-    payer: { email: company.email },
+    payer: {
+      email: company.email,
+    },
+    payment_methods: {
+      excluded_payment_types: [
+        { id: 'atm' },
+        { id: 'prepaid_card' },
+      ], // Permite todos os métodos de pagamento - menos caixas eletrônicos e cartões pré-pagos
+      excluded_payment_methods: [], // Permite todos os métodos de pagamento
+      installments: 1, // Número de parcelas (1 para PIX e Boleto)
+    },
     back_urls: {
       success: `${process.env.FRONTEND_URL}/sucesso`,
       failure: `${process.env.FRONTEND_URL}/falha`,
