@@ -1,50 +1,60 @@
-const signatureService = require('../services/signatureService');
+const { signaturePackageService, signatureService } = require('../services/signatureService');
 const { packageValidation, signatureValidation } = require('../validators/signaturesValidator');
 
 const signaturePackageController = {
   getAllPackages: async (req, res) => {
     try {
-      const packages = await signatureService.getAllPackages();
-      res.json(packages);
+      const packages = await signaturePackageService.getSignature();
+      if (!packages) {
+        return res.status(404).json({ error: 'Packages not found' });
+      }
+
+      return res.status(200).json(packages);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      return res.status(500).json({ error: error.message });
     }
   },
   getPackageDetails: async (req, res) => {
     try {
       const { id } = req.params;
-      const packageDetails = await signatureService.getPackageDetails(id);
-      res.json(packageDetails);
+      const packageDetails = await signaturePackageService.getSignatureById(id);
+      if (!packageDetails) {
+        return res.status(404).json({ error: 'Package not found' });
+      }
+
+      return res.status(200).json(packageDetails);
     } catch (error) {
-      res.status(404).json({ error: 'Package not found' });
+      return res.status(404).json({ error: 'Package not found' });
     }
   },
   createPackage: async (req, res) => {
     try {
-      const { error } = await signatureValidation.validate(req, res);
+      const { error } = await packageValidation.validate(req.body);
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
       }
 
       const packageData = req.body;
 
-      const packageId = await signatureService.createPackage(packageData);
-      res.status(201).json({ message: 'Package created successfully', packageId });
+      const packageId = await signaturePackageService.createSignature(packageData);
+      return res.status(201).json({ message: 'Package created successfully', packageId });
     } catch (error) {
-      res.status(500).json({ error: error.message || 'Failed to create package' });
+      console.log(error);
+      return res.status(500).json({ error: error.message || 'Failed to create package' });
     }
   },
 
   updatePackage: async (req, res) => {
     try {
-      const { empresaId } = req.params;
+      const { companyId } = req.params;
       const { error } = packageValidation.validate(req.body);
-
+  
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
       }
-
-      const response = await signatureService.upgradeDowngradePackage(empresaId, value.novoPacoteId);
+  
+      const { newPackageId } = req.body;
+      const response = await signatureService.upgradeDowngradePackage(companyId, newPackageId);
       return res.status(200).json(response);
     } catch (error) {
       return res.status(400).json({ error: error.message });

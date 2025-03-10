@@ -1,47 +1,44 @@
 const mercadopago = require('../../../services/mercadoPagoService');
 const paymentsModel = require('../models/paymentsModel');
-const paymentsService = require('../services/paymentsService');
-const validatePayment = require('../validators/paymentValidator');
+const paymentValidation = require('../validators/paymentValidator');
+const { createPaymentService, getAllPaymentsService, getPaymentByCompanyService, updatePaymentStatusService } = require('../services/paymentsService');
 
-const paymentsController = () => {
-  const createPayment = async (req, res) => {
-    try {
-      const { error } = validatePayment.validate(req.body);
-      if (error) {
-        return res.status(400).json({ error: error.details[0].message });
-      }
-      
-      const payment = await paymentsService.createPayment(req.body);
-      return res.status(201).json(payment);
-    } catch (err) {
-      return res.status(400).json({ error: err.message });
+const createPaymentHandler = async (req, res) => {
+  try {
+    const { error } = paymentValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
     }
-  };
-
-  const getAllPayments = async (req, res) => {
-    try {
-      const payments = await paymentsService.getAllPayments();
-      return res.json(payments);
-    } catch (err) {
-      return res.status(500).json({ error: err.message });
+    const { company_id, package_id } = req.body;
+    const payment = await createPaymentService({ company_id, package_id });
+    if (!payment) {
+      return res.status(400).json({ error: 'Failed to create payment' });
     }
-  };
 
-  const getPaymentByCompany = async (req, res) => {
-    try {
-      const { company_id } = req.params;
-      const payments = await paymentsService.getPaymentByCompany(company_id);
-      return res.json(payments);
-    } catch (err) {
-      return res.status(500).json({ error: err.message });
-    }
-  };
+    return res.status(201).json(payment);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: error.message });
+  }
+};
 
-  return {
-    createPayment,
-    getAllPayments,
-    getPaymentByCompany,
-  };
+const getAllPaymentsHandler = async (req, res) => {
+  try {
+    const payments = await getAllPaymentsService();
+    return res.json(payments);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+const getPaymentByCompanyHandler = async (req, res) => {
+  try {
+    const { company_id } = req.params;
+    const payments = await getPaymentByCompanyService(company_id);
+    return res.json(payments);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
 };
 
 const webhookHandler = async (req, res) => {
@@ -56,16 +53,16 @@ const webhookHandler = async (req, res) => {
 
     const dbPayment = await paymentsModel.getPaymentById(id);
     if (dbPayment && dbPayment.status === status) {
-      return res.sendStatus(200); 
+      return res.sendStatus(200);
     }
 
-    await paymentsService.updatePaymentStatus(id, status);
+    await updatePaymentStatusService(id, status);
 
     const preferenceId = payment.body.preference_id;
     if (preferenceId) {
       const dbPayment = await paymentsModel.getPaymentByPreferenceId(preferenceId);
       if (dbPayment && !dbPayment.payment_id) {
-        await paymentsModel.updatePaymentByPreferenceId(preferenceId, { payment_id: id });
+        await paymentsModel.updatePaymentByPreferenceIdModel(preferenceId, { payment_id: id });
       }
     }
 
@@ -76,4 +73,9 @@ const webhookHandler = async (req, res) => {
   }
 };
 
-module.exports = { paymentsController: paymentsController(), webhookHandler };
+module.exports = {
+  createPaymentHandler,
+  getAllPaymentsHandler,
+  getPaymentByCompanyHandler,
+  webhookHandler,
+};

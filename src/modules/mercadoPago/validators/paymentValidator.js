@@ -1,16 +1,25 @@
 const Joi = require('joi');
+const errorMessagePayment = require('./errorMessagePayment');
 
-const paymentSchema = Joi.object({
-  company_id: Joi.number().integer().required(),
-  package_id: Joi.number().integer().required(),
+const paymentValidation = Joi.object({
+  company_id: Joi.number()
+   .integer()
+   .positive()
+   .required()
+   .messages({
+     'number.integer': errorMessagePayment().company_id.invalid,
+     'number.positive': errorMessagePayment().company_id.required,
+     'any.required': errorMessagePayment().company_id.required,
+   }),
+  package_id: Joi.number()
+   .integer()
+   .positive()
+   .required()
+   .messages({
+     'number.integer': errorMessagePayment().package_id.invalid,
+     'number.positive': errorMessagePayment().package_id.required,
+     'any.required': errorMessagePayment().package_id.required,
+   }),
 });
 
-const validatePayment = (req, res, next) => {
-  const { error } = paymentSchema.validate(req.body);
-  if (error) {
-    return res.status(400).json({ error: error.details[0].message });
-  }
-  next();
-};
-
-module.exports = validatePayment;
+module.exports = paymentValidation;

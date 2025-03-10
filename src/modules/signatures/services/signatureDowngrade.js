@@ -1,48 +1,50 @@
 const { knexInstance } = require("../../config/db");
 
 const signatureService = {
-  async upgradeDowngradePackage(empresaId, novoPacoteId) {
+  async upgradeDowngradePackage(companyId, newPackageId) {
     const db = await knexInstance();
 
-    // 1️⃣ Buscar assinatura atual da empresa
-    const assinaturaAtual = await db("assinaturas")
-      .where({ empresa_id: empresaId })
+    // 1️⃣ Get the current subscription of the company
+    const currentSubscription = await db("signatures")
+      .where({ company_id: companyId, status: "active" })
       .first();
 
-    if (!assinaturaAtual) {
-      throw new Error("Assinatura não encontrada");
+    if (!currentSubscription) {
+      throw new Error("Subscription not found");
     }
 
-    // 2️⃣ Buscar detalhes do novo pacote
-    const novoPacote = await db("pacotes").where({ id: novoPacoteId }).first();
+    // 2️⃣ Get details of the new package
+    const newPackage = await db("signatures_packages")
+      .where({ id: newPackageId })
+      .first();
 
-    if (!novoPacote) {
-      throw new Error("Pacote não encontrado");
+    if (!newPackage) {
+      throw new Error("Package not found");
     }
 
-    // 3️⃣ Verificar número de vagas publicadas
-    const vagasAtivas = await db("vagas")
-      .where({ empresa_id: empresaId, status: "ATIVA" })
+    // 3️⃣ Check the number of active job postings
+    const activeJobs = await db("jobs")
+      .where({ company_id: companyId, status: "active" })
       .count("* as total");
 
-    const totalVagasAtivas = vagasAtivas[0].total;
+    const totalActiveJobs = activeJobs[0].total;
 
-    // 4️⃣ Se downgrade, desativar vagas excedentes
-    if (novoPacote.limite_vagas < totalVagasAtivas) {
-      const excedente = totalVagasAtivas - novoPacote.limite_vagas;
-      await db("vagas")
-        .where({ empresa_id: empresaId, status: "ATIVA" })
-        .orderBy("created_at", "desc") // Desativa as mais recentes primeiro
-        .limit(excedente)
-        .update({ status: "DESABILITADA" });
+    // 4️⃣ If downgrading, disable excess job postings
+    if (newPackage.vacancy_limit < totalActiveJobs) {
+      const excess = totalActiveJobs - newPackage.vacancy_limit;
+      await db("jobs")
+        .where({ company_id: companyId, status: "active" })
+        .orderBy("created_at", "desc") // Disable the most recent jobs first
+        .limit(excess)
+        .update({ status: "disabled" });
     }
 
-    // 5️⃣ Atualizar a assinatura da empresa
-    await db("assinaturas")
-      .where({ empresa_id: empresaId })
-      .update({ pacote_id: novoPacoteId });
+    // 5️⃣ Update the company's subscription
+    await db("signatures")
+      .where({ company_id: companyId })
+      .update({ package_id: newPackageId });
 
-    return { message: "Pacote atualizado com sucesso" };
+    return { message: "Package updated successfully" };
   },
 };
 

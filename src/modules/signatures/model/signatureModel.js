@@ -1,10 +1,9 @@
 const { knexInstance } = require('../../../config/db');
-const { company } = require('../../../middlewares/middleware_roles/rolesMiddleware');
 
 const signaturePackageModel = {
   getAllSignature: async () => {
     const db = await knexInstance();
-    return db('signatures_packages').first();
+    return db('signatures_packages').select();
   },
   getSignatureById: async (id) => {
     const db = await knexInstance();
@@ -19,7 +18,7 @@ const signaturePackageModel = {
     const [id] = await db('signatures_packages').insert(signature);
     return id;
   },
-  deleteSignature: async () => {
+  deleteSignature: async (id) => {
     const db = await knexInstance();
     return db('signatures_packages').where({ id }).del();
   },

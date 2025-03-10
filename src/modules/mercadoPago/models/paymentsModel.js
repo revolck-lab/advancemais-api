@@ -1,40 +1,45 @@
 const { knexInstance } = require('../../../config/db');
 
 const paymentsModel = {
-  createPayment: async (payment) => {
+  createPaymentModel: async (payment) => {
     const db = await knexInstance();
     const [id] = await db('company_payments').insert(payment);
     return db('company_payments').where({ id }).first(); // Retorna o objeto completo
   },
 
-  updatePaymentByPreferenceId: async (mpPreferenceId, status) => {
+  getPaymentByPaymentIdModel: async (paymentId) => {
+    const db = await knexInstance();
+    return db('company_payments').where({ payment_id: paymentId }).first();
+  },
+
+  updatePaymentByPreferenceIdModel: async (mpPreferenceId, status) => {
     const db = await knexInstance();
     return db('company_payments')
       .where({ mp_preference_id: mpPreferenceId })
       .update({ status });
   },
 
-  updatePaymentByPaymentId: async (paymentId, status) => {
+  updatePaymentByPaymentIdModel: async (paymentId, status) => {
     const db = await knexInstance();
     return db('company_payments')
       .where({ payment_id: paymentId })
       .update({ status });
   },
 
-  getPaymentById: async (id) => {
+  getPaymentByIdModel: async (id) => {
     const db = await knexInstance();
     return db('company_payments').where({ id }).first();
   },
 
-  getAllPayments: async () => {
+  getAllPaymentsModel: async () => {
     const db = await knexInstance();
     return db('company_payments').select('*');
   },
 
-  getPaymentByCompany: async (company_id) => {
+  getPaymentByCompanyModel: async (company_id) => {
     const db = await knexInstance();
-    return db('company_payments').where({ company_id: company_id }).first();
+    return db('company_payments').where({ company_id }).first();
   },
 };
 
-module.exports = paymentsModel;
+module.exports = paymentsModel; 

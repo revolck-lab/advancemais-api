@@ -1,5 +1,4 @@
-const knexInstance = require("../../../config/db");
-const { createVacancy } = require("../controllers/vacanciesController");
+const { knexInstance } = require("../../../config/db");
 
 const vacancyModel = {
   list: async (filters, limit, offset) => {

@@ -1,13 +1,18 @@
 const express = require('express');
 const authToken = require('../../../middlewares/authMiddleware');
 const authorization = require('../../../middlewares/middleware_roles/rolesMiddleware');
-const { paymentsController, webhookHandler } = require('../controllers/paymentsController');
+const {
+  createPaymentHandler,
+  getAllPaymentsHandler,
+  getPaymentByCompanyHandler,
+  webhookHandler,
+} = require('../controllers/paymentsController'); // Importe as funções corretamente
 
 const router = express.Router();
 
-router.get('/payment', authToken, authorization.accessLevel(3,7,8), paymentsController.getAllPayments);
-router.get('/company/:company_id', authToken, authorization.accessLevel(3,7,8), paymentsController.getPaymentByCompany);
-router.post('/payment', authToken, authorization.accessLevel(3,7,8), paymentsController.createPayment);
+router.get('/payment', authToken, authorization.accessLevel(3, 7, 8), getAllPaymentsHandler);
+router.get('/company/:company_id', authToken, authorization.accessLevel(3, 7, 8), getPaymentByCompanyHandler);
+router.post('/payment', authToken, authorization.accessLevel(3, 7, 8), createPaymentHandler);
 
 router.post('/checkout/webhook', (req, res, next) => {
   const secret = req.query.secret || req.body.secret;

@@ -1,54 +1,62 @@
 const mercadopago = require('../../../services/mercadoPagoService');
 const paymentsModel = require('../models/paymentsModel');
+const { knexInstance } = require('../../../config/db');
 
-const createPayment = async ({ company_id, package_id }) => {
+const createPaymentService = async ({ company_id, package_id }) => {
   const db = await knexInstance();
   const company = await db('company').where({ id: company_id }).first();
   const package = await db('signatures_packages').where({ id: package_id }).first();
 
-  const preference = {
-    items: [
-      {
-        title: `Pacote ID: ${package_id}`,
-        quantity: 1,
-        unit_price: package.price, // Preço dinâmico
-        currency_id: 'BRL',
+  if (!company || !package) {
+    throw new Error('Empresa ou pacote não encontrado');
+  }
+
+  // Verifica se a BASE_URL está definida corretamente
+  if (!process.env.FRONTEND_URL || !process.env.MP_ACCESS_TOKEN) {
+    throw new Error("A variável de ambiente BASE_URL ou WEBHOOK_SECRET não está definida!");
+  }
+
+  const notificationUrl = `${process.env.FRONTEND_URL}/api/checkout/webhook?secret=${process.env.MP_ACCESS_TOKEN}`;
+
+  // Valida se a URL é realmente válida antes de enviar
+  try {
+    new URL(notificationUrl);
+  } catch (error) {
+    throw new Error(`URL inválida: ${notificationUrl}`);
+  }
+
+  const paymentData = {
+    body: {
+      transaction_amount: parseFloat(package.price),
+      description: `Pacote ID: ${package_id}`,
+      payment_method_id: "pix",
+      payer: {
+        email: company.email,
       },
-    ],
-    payer: {
-      email: company.email,
-    },
-    payment_methods: {
-      excluded_payment_types: [
-        { id: 'atm' },
-        { id: 'prepaid_card' },
-      ], // Permite todos os métodos de pagamento - menos caixas eletrônicos e cartões pré-pagos
-      excluded_payment_methods: [], // Permite todos os métodos de pagamento
-      installments: 1, // Número de parcelas (1 para PIX e Boleto)
-    },
-    back_urls: {
-      success: `${process.env.FRONTEND_URL}/sucesso`,
-      failure: `${process.env.FRONTEND_URL}/falha`,
-      pending: `${process.env.FRONTEND_URL}/pendente`,
-    },
-    auto_return: 'approved',
-    notification_url: `${process.env.BASE_URL}/api/checkout/webhook?secret=${process.env.WEBHOOK_SECRET}`,
+      notification_url: notificationUrl, // URL validada
+    }
   };
 
-  const response = await mercadopago.preferences.create(preference);
-  const paymentData = {
+  const response = await mercadopago.createPayment(paymentData);
+
+  const paymentDataToSave = {
     company_id,
     package_id,
     mp_preference_id: response.body.id,
     status: 'PENDING',
-    payment_id: null, // Será atualizado pelo webhook
+    payment_id: response.body.id,
   };
 
-  const payment = await paymentsModel.createPayment(paymentData);
-  return { init_point: response.body.init_point, paymentId: payment.id };
+  const payment = await paymentsModel.createPayment(paymentDataToSave);
+  return { 
+    qr_code_base64: response.body.point_of_interaction.transaction_data.qr_code_base64,
+    ticket_url: response.body.point_of_interaction.transaction_data.ticket_url,
+    paymentId: payment.id 
+  };
 };
 
-const updatePaymentStatus = async (paymentId, status) => {
+
+const updatePaymentStatusService = async (paymentId, status) => {
   const payment = await paymentsModel.getPaymentByPaymentId(paymentId);
   if (!payment) {
     const db = await knexInstance();
@@ -58,12 +66,17 @@ const updatePaymentStatus = async (paymentId, status) => {
   return paymentsModel.updatePaymentByPaymentId(paymentId, status);
 };
 
-const getAllPayments = async () => {
-  return paymentsModel.getAllPayments();
+const getAllPaymentsService = async () => {
+  return paymentsModel.getAllPaymentsModel();
 };
 
-const getPaymentByCompany = async (company_id) => {
-  return paymentsModel.getPaymentByCompany(company_id);
+const getPaymentByCompanyService = async (company_id) => {
+  return paymentsModel.getPaymentByCompanyModel(company_id);
 };
 
-module.exports = { createPayment, updatePaymentStatus, getAllPayments, getPaymentByCompany };
+module.exports = {
+  createPaymentService,
+  updatePaymentStatusService,
+  getAllPaymentsService,
+  getPaymentByCompanyService,
+};
