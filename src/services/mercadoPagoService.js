@@ -14,34 +14,12 @@ const userClient = new User(client);
 const testConnectionMercadoPago = async () => {
     try {
         const response = await userClient.get();
-        console.log("✅ Conexão com Mercado Pago bem-sucedida:");
+        console.log("✅ Successful connection to Mercado Pago:");
         return response;
     } catch (error) {
-        console.error('Erro ao conectar ao Mercado Pago:', error);
+        console.error('Error connecting to Mercado Pago:', error);
         throw error;
     }
 };
 
-// Função para criar um pagamento
-const createPayment = async (paymentData) => {
-    try {
-        const response = await payment.create(paymentData);
-        return response;
-    } catch (error) {
-        console.error('Erro ao criar pagamento:', error);
-        throw error;
-    }
-};
-
-// Função para obter o status de um pagamento
-const getPaymentStatus = async (paymentId) => {
-    try {
-        const response = await payment.get({ id: paymentId });
-        return response;
-    } catch (error) {
-        console.error('Erro ao obter status do pagamento:', error);
-        throw error;
-    }
-};
-
-module.exports = { testConnectionMercadoPago, createPayment, getPaymentStatus };
+module.exports = testConnectionMercadoPago;
