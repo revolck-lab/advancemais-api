@@ -40,6 +40,16 @@ const paymentsModel = {
     const db = await knexInstance();
     return db('company_payments').where({ company_id }).first();
   },
+
+  getCompanyModel: async (company_id) => {
+    const db = await knexInstance();
+    return db('company').where({ id: company_id }).first();
+  },
+
+  getPackageModel: async (package_id) => {
+    const db = await knexInstance();
+    return db('signatures_packages').where({ id: package_id }).first();
+  },
 };
 
 module.exports = paymentsModel; 

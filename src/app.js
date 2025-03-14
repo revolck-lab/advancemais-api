@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const { swaggerUi, swaggerDocs } = require("./config/swagger");
+
+// Importação de rotas
 const userRoutes = require("./modules/users/routes/userRoutes");
 const passwordResetRoutes = require("./modules/users/routes/passwordResetRoutes");
 const bannerRoutes = require("./modules/cms/routes/bannerRoutes");
@@ -13,13 +15,9 @@ const vacanciesRoutes = require("./modules/vacancies/routes/vacanciesRoutes");
 const businessRoutes = require("./modules/cms/routes/business_informationRoutes");
 const superAdminRoutes = require("./modules/cms/routes/superAdminRoutes");
 const signatureRoutes = require("./modules/signatures/routes/signatureRoutes");
-
-// const subscriptionRoutes = require('./modules/subscriptionRoutes');
-
-//Middleware
-
 const paymentRoutes = require("./modules/mercadoPago/routes/paymentsRoute");
 
+// Middleware de autenticação
 const authToken = require("./middlewares/authMiddleware");
 
 const app = express();
@@ -34,16 +32,18 @@ app.use(cors({
 
 app.use(express.json());
 
-// Rotas públicas
+// Documentação da API
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// Rotas públicas (sem autenticação)
 app.use("/api/auth", userRoutes);
 app.use("/api/password", passwordResetRoutes);
 app.use("/api/budget", budgetRoutes);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Rota específica do webhook (sem autenticação)
-app.use("/api/mercadoPago/checkout/webhook", paymentRoutes);
+// Rota específica do webhook (evita autenticação desnecessária)
+app.use("/api/payment", paymentRoutes);
 
-// Middleware de autenticação para outras rotas protegidas
+// Middleware de autenticação (aplicado apenas a partir deste ponto)
 app.use(authToken);
 
 // Rotas protegidas
@@ -56,16 +56,13 @@ app.use("/api/slider", sliderRoutes);
 app.use("/api/superAdmin", superAdminRoutes);
 app.use("/api/business_info", businessRoutes);
 app.use("/api/signatures", signatureRoutes);
-// app.use('/api', subscriptionRoutes);
-
-app.use("/api/mercadoPago", paymentRoutes);
 
 // Tratamento de rotas não encontradas
 app.use((req, res) => {
     res.status(404).json({ error: "Rota não encontrada" });
 });
 
-// Tratamento de erros genéricos
+// Tratamento de erros globais
 app.use((err, req, res, next) => {
     console.error("Erro no servidor:", err.stack);
     res.status(500).json({ error: "Erro interno do servidor" });

@@ -20,6 +20,11 @@ const paymentValidation = Joi.object({
      'number.positive': errorMessagePayment().package_id.required,
      'any.required': errorMessagePayment().package_id.required,
    }),
+   payment_method: Joi.string()
+   .required()
+   .messages({
+     'any.required': errorMessagePayment().payment_method.required,
+   }),
 });
 
 module.exports = paymentValidation;

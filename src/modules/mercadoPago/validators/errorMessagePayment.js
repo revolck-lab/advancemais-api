@@ -7,6 +7,9 @@ const errorMessagePayment = () => ({
     required: 'The "package_id" field is required',
     invalid: 'The "package_id" field must be a valid integer',
   },
+  payment_method: {
+    required: 'The "payment_method" field is required',
+  },
 });
 
 module.exports = errorMessagePayment;

@@ -1,60 +1,89 @@
-const mercadopago = require('../../../services/mercadoPagoService');
+const { MercadoPagoConfig, Payment, mercadopago } = require('mercadopago');
 const paymentsModel = require('../models/paymentsModel');
 const { knexInstance } = require('../../../config/db');
 
-const createPaymentService = async ({ company_id, package_id }) => {
+const createPaymentService = async (body_payment) => {
+  // Criar uma instância do Mercado Pago com autenticação
+  const client = new MercadoPagoConfig({
+    accessToken: process.env.MP_ACCESS_TOKEN,
+  });
+
   const db = await knexInstance();
-  const company = await db('company').where({ id: company_id }).first();
-  const package = await db('signatures_packages').where({ id: package_id }).first();
+  const company = await db('company').where({ id: body_payment.company_id }).first();
+  const package = await db('signatures_packages').where({ id: body_payment.package_id }).first();
 
+  // Verifica se os dados de pacotes e empresas existem
   if (!company || !package) {
-    throw new Error('Empresa ou pacote não encontrado');
+    throw new Error("Couldn't find company or package in database");
   }
-
+  console.log("Found company", company);
+  console.log("Found package", package);
   // Verifica se a BASE_URL está definida corretamente
   if (!process.env.FRONTEND_URL || !process.env.MP_ACCESS_TOKEN) {
-    throw new Error("A variável de ambiente BASE_URL ou WEBHOOK_SECRET não está definida!");
+    throw new Error('Invalid credentials required for authentication');
   }
 
   const notificationUrl = `${process.env.FRONTEND_URL}/api/checkout/webhook?secret=${process.env.MP_ACCESS_TOKEN}`;
 
-  // Valida se a URL é realmente válida antes de enviar
+  // Valida se a URL é válida antes de enviar
   try {
     new URL(notificationUrl);
   } catch (error) {
-    throw new Error(`URL inválida: ${notificationUrl}`);
+    throw new Error(`Invalid URL: ${notificationUrl}`);
   }
 
-  const paymentData = {
+  const payment = new Payment(client);
+  const paymentData = await payment.create({
     body: {
       transaction_amount: parseFloat(package.price),
-      description: `Pacote ID: ${package_id}`,
-      payment_method_id: "pix",
-      payer: {
+      description: `Pacote: ${package.name}`,
+      payment_method_id: body_payment.payment_method,
+      payer: { 
         email: company.email,
-      },
-      notification_url: notificationUrl, // URL validada
-    }
-  };
+      }
+    },
+  });
 
-  const response = await mercadopago.createPayment(paymentData);
+  // �� Log dos dados enviados ao Mercado Pago para debug
+  console.log("Dados enviados ao Mercado Pago:", JSON.stringify({
+    transaction_amount: Number(package.price),
+    description: `Pacote: ${package.name}`,
+    payment_method_id: body_payment.payment_method,
+    payer: { 
+      email: company.email,
+      first_name: company.name,
+    }
+  }, null, 2));
+    // 🔍 Log da resposta do Mercado Pago para debug
+  // console.log("Resposta do Mercado Pago:", JSON.stringify(paymentData, null, 2));
+
+  // 🔍 Verifica se a resposta contém os dados esperados
+  if (!paymentData || !paymentData.body || !paymentData.body.id) {
+    throw new Error(`Error creating payment: Invalid response from Mercado Pago - ${JSON.stringify(paymentData)}`);
+  }
+
+  // 🔍 Verifica se os campos opcionais existem antes de acessá-los
+  const pointOfInteraction = paymentData.body.point_of_interaction;
+  const transactionData = pointOfInteraction ? pointOfInteraction.transaction_data : null;
 
   const paymentDataToSave = {
-    company_id,
-    package_id,
-    mp_preference_id: response.body.id,
+    company_id: company.id,
+    package_id: package.id,
+    mp_preference_id: paymentData.body.id,
     status: 'PENDING',
-    payment_id: response.body.id,
+    payment_id: paymentData.body.id,
   };
 
-  const payment = await paymentsModel.createPayment(paymentDataToSave);
-  return { 
-    qr_code_base64: response.body.point_of_interaction.transaction_data.qr_code_base64,
-    ticket_url: response.body.point_of_interaction.transaction_data.ticket_url,
-    paymentId: payment.id 
+  await paymentsModel.createPaymentModel(paymentDataToSave);
+
+  return {
+    // response: paymentData,
+    // qr_code_base64: transactionData ? transactionData.qr_code_base64 : null, 
+    // ticket_url: transactionData ? transactionData.ticket_url : null,
+    paymentId: paymentData.body.id,
+    ticket_url,
   };
 };
-
 
 const updatePaymentStatusService = async (paymentId, status) => {
   const payment = await paymentsModel.getPaymentByPaymentId(paymentId);
