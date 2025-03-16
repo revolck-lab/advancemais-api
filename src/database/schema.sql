@@ -24,6 +24,7 @@ CREATE TABLE education (
 CREATE TABLE address (
     id INT AUTO_INCREMENT PRIMARY KEY,
     address VARCHAR(255) NOT NULL,
+    number INT(8) NOT NULL,
     city VARCHAR(100) NOT NULL,
     state_id VARCHAR(100) NOT NULL,
     cep CHAR(8) NOT NULL
@@ -102,7 +103,7 @@ CREATE TABLE vacancy (
     notes VARCHAR(255),
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
-    status TINYINT(1) DEFAULT 1,  -- Boolean em MySQL
+    status ENUM('active', 'canceled', 'expired', 'under review'),
     company_id INT NOT NULL,
     area_id INT NOT NULL,
     city varchar(255) NOT NULL,
@@ -302,3 +303,52 @@ CREATE TABLE site_info (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Data de atualização automática
     FOREIGN KEY (author_id) REFERENCES user(id) -- Chave estrangeira para a tabela user
 );
+
+-- catálogo de assinaturas
+CREATE TABLE signatures_packages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    vacancy_limit INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    periodicity VARCHAR(20) NOT NULL DEFAULT 'monthly',
+    featured BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+-- assinaturas das empresas 
+CREATE TABLE signatures (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT NOT NULL,
+    package_id INT NOT NULL,
+    start_date DATETIME NOT NULL,
+    end_date DATETIME,
+    status ENUM('active', 'canceled', 'expired') DEFAULT 'active',
+    cancellation_date DATETIME NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES company(id),
+    FOREIGN KEY (package_id) REFERENCES signatures_packages(id)
+);
+
+CREATE TABLE company_payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT NOT NULL,                        -- Referencia a tabela company
+    package_id INT NOT NULL,                        -- Referencia a tabela signatures_packages
+    mp_preference_id VARCHAR(50) NOT NULL,          -- ID da preferência do Mercado Pago
+    payment_id VARCHAR(50) NULL
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',  -- Status da transação (ex.: PENDING, APPROVED, CANCELLED)
+    start_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Data de início da transação
+    end_date TIMESTAMP,                             -- Data de conclusão ou expiração (opcional)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp de criação
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Timestamp de atualização
+
+    -- Chaves estrangeiras
+    FOREIGN KEY (company_id) REFERENCES company(id) ON DELETE CASCADE,
+    FOREIGN KEY (package_id) REFERENCES signatures_packages(id) ON DELETE CASCADE
+);
+
+-- Índices para otimizar consultas
+CREATE INDEX idx_company_id ON company_payments(company_id);
+CREATE INDEX idx_package_id ON company_payments(package_id);
+CREATE INDEX idx_mp_preference_id ON company_payments(mp_preference_id);
+CREATE INDEX idx_payment_id ON company_payments(payment_id);

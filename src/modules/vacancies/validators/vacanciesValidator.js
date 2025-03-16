@@ -31,9 +31,6 @@ const vacancyValidation = Joi.object({
       "date.greater": errorMessageVacancy().end_date.greater,
       "any.required": errorMessageVacancy().end_date.required,
     }),
-  status: Joi.boolean().default(true).messages({
-    "boolean.base": errorMessageVacancy().status.base,
-  }),
   company_id: Joi.number().required().messages({
     "number.base": errorMessageVacancy().company_id.base,
     "any.required": errorMessageVacancy().company_id.required,
