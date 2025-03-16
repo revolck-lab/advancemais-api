@@ -7,7 +7,8 @@ const router = express.Router();
 
 // router.get('/payment', authToken, authorization.accessLevel(3, 7, 8), getAllPaymentsHandler);
 // router.get('/company/:company_id', authToken, authorization.accessLevel(3, 7, 8), getPaymentByCompanyHandler);
-router.post('/create', authToken, authorization.accessLevel(3, 7, 8), mercadopagoController.createPaymentController);
+router.post('/create', mercadopagoController.createPaymentController);
+router.get('/user', mercadopagoController.getUseMercadoPago);
 
 // router.post('/checkout/webhook', (req, res, next) => {
 //   const secret = req.query.secret || req.body.secret;

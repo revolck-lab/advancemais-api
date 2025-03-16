@@ -24,6 +24,7 @@ CREATE TABLE education (
 CREATE TABLE address (
     id INT AUTO_INCREMENT PRIMARY KEY,
     address VARCHAR(255) NOT NULL,
+    number INT(8) NOT NULL,
     city VARCHAR(100) NOT NULL,
     state_id VARCHAR(100) NOT NULL,
     cep CHAR(8) NOT NULL
