@@ -40,6 +40,7 @@ const companyService = {
         role_id
     } = companyData;
 
+    // Verifica se o e-mail e o CNPJ já existem
     const [emailExists, cnpjExists] = await Promise.all([
         companyModel.findByEmail(email),
         companyModel.findByCnpj(cnpj)
@@ -53,8 +54,10 @@ const companyService = {
         return { error: 'CNPJ already registered' };
     }
 
+    // Criptografa a senha
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Cria o endereço e obtém o ID
     const addressData = {
         address,
         number,
@@ -65,12 +68,38 @@ const companyService = {
 
     const addressId = await addressModel.create(addressData);
 
+    // Dados da empresa
+    const companyDataForValidation = {
+        cnpj,
+        trade_name,
+        business_name,
+        contact_name,
+        address,  // Mantemos o endereço completo para validação
+        number,
+        city,
+        state_id,
+        cep,
+        whatsapp,
+        mobile_phone,
+        landline_phone,
+        email,
+        password,
+        role_id
+    };
+
+    // Valida os dados
+    // const { error } = companyValidation.validate(companyDataForValidation);
+    // if (error) {
+    //     return { error: error.details[0].message };
+    // }
+
+    // Cria a empresa no banco
     const companyId = await companyModel.createCompany({
         cnpj,
         trade_name,
         business_name,
         contact_name,
-        address_id: addressId,
+        address_id: addressId, // Aqui passa apenas o ID do endereço
         whatsapp,
         mobile_phone,
         landline_phone,
@@ -79,8 +108,9 @@ const companyService = {
         role_id
     });
 
+    // Busca a empresa recém-criada
     const newCompany = await companyModel.getCompanyById(companyId);
-    delete newCompany.password;
+    delete newCompany.password; // Remove a senha da resposta
 
     return { company: newCompany };
   }

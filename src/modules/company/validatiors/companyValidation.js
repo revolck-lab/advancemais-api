@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const messageErrorCompany = require("./errorMessageCompany");
+const messageErrorCompany = require("../validatiors/errorMessageCompany");
 
 const companyValidation = Joi.object({
   cnpj: Joi.string()
@@ -36,37 +36,65 @@ const companyValidation = Joi.object({
       "string.max": messageErrorCompany().contact_name.max(255),
       "any.required": messageErrorCompany().contact_name.required,
     }),
-  address_id: Joi.number().integer().positive().required().messages({
-    "number.base": messageErrorCompany().address_id.invalid,
-    "any.required": messageErrorCompany().address_id.required,
-  }),
+  address: Joi.string()
+    .max(255)
+    .required()
+    .messages({
+      "string.empty": messageErrorCompany().address.empty,
+      "string.max": messageErrorCompany().address.max(255),
+      "any.required": messageErrorCompany().address.required,
+    }),
+  number: Joi.string()
+    .max(10)
+    .required()
+    .messages({
+      "string.empty": messageErrorCompany().number.empty,
+      "string.max": messageErrorCompany().number.max(10),
+      "any.required": messageErrorCompany().number.required,
+    }),
+  city: Joi.string()
+    .max(255)
+    .required()
+    .messages({
+      "string.empty": messageErrorCompany().city.empty,
+      "string.max": messageErrorCompany().city.max(255),
+      "any.required": messageErrorCompany().city.required,
+    }),
+  state_id: Joi.number()
+    .integer()
+    .positive()
+    .required()
+    .messages({
+      "number.base": messageErrorCompany().state_id.invalid,
+      "any.required": messageErrorCompany().state_id.required,
+    }),
+  cep: Joi.string()
+    .length(8)
+    .pattern(/^[0-9]+$/)
+    .required()
+    .messages({
+      "string.empty": messageErrorCompany().cep.empty,
+      "string.length": messageErrorCompany().cep.length,
+      "string.pattern.base": messageErrorCompany().cep.invalid,
+      "any.required": messageErrorCompany().cep.required,
+    }),
   whatsapp: Joi.string()
-    .length(11)
-    .pattern(/^[0-9]+$/)
-    .required()
-    .messages({
-      "string.empty": messageErrorCompany().whatsapp.empty,
-      "string.length": messageErrorCompany().whatsapp.length,
-      "string.pattern.base": messageErrorCompany().whatsapp.invalid,
-      "any.required": messageErrorCompany().whatsapp.required,
-    }),
-  mobile_phone: Joi.string()
-    .length(11)
-    .pattern(/^[0-9]+$/)
-    .required()
-    .messages({
-      "string.empty": messageErrorCompany().mobile_phone.empty,
-      "string.length": messageErrorCompany().mobile_phone.length,
-      "string.pattern.base": messageErrorCompany().mobile_phone.invalid,
-      "any.required": messageErrorCompany().mobile_phone.required,
-    }),
-  landline_phone: Joi.string()
-    .length(11)
-    .pattern(/^[0-9]+$/)
+    .max(15)
     .allow(null, "")
     .messages({
-      "string.length": messageErrorCompany().landline_phone.length,
-      "string.pattern.base": messageErrorCompany().landline_phone.invalid,
+      "string.max": messageErrorCompany().whatsapp.max(15),
+    }),
+  mobile_phone: Joi.string()
+    .max(15)
+    .allow(null, "")
+    .messages({
+      "string.max": messageErrorCompany().mobile_phone.max(15),
+    }),
+  landline_phone: Joi.string()
+    .max(15)
+    .allow(null, "")
+    .messages({
+      "string.max": messageErrorCompany().landline_phone.max(15),
     }),
   email: Joi.string()
     .email()
@@ -88,13 +116,14 @@ const companyValidation = Joi.object({
       "string.max": messageErrorCompany().password.max(255),
       "any.required": messageErrorCompany().password.required,
     }),
-  status: Joi.boolean().default(true).messages({
-    "boolean.base": messageErrorCompany().status.invalid,
-  }),
-  role_id: Joi.number().integer().positive().required().messages({
-    "number.base": messageErrorCompany().role_id.invalid,
-    "any.required": messageErrorCompany().role_id.required,
-  }),
+  role_id: Joi.number()
+    .integer()
+    .positive()
+    .required()
+    .messages({
+      "number.base": messageErrorCompany().role_id.invalid,
+      "any.required": messageErrorCompany().role_id.required,
+    }),
 });
 
 module.exports = companyValidation;

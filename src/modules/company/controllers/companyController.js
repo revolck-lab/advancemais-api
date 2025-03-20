@@ -51,6 +51,7 @@ const companyController = {
 
       res.status(201).json(createdCompany);
     } catch (error) {
+      console.log("error: ", error);
       res.status(500).json({ error: "Internal error while registering company" });
     }
   },
