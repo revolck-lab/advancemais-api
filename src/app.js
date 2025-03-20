@@ -16,6 +16,7 @@ const businessRoutes = require("./modules/cms/routes/business_informationRoutes"
 const superAdminRoutes = require("./modules/cms/routes/superAdminRoutes");
 const signatureRoutes = require("./modules/signatures/routes/signatureRoutes");
 const paymentRoutes = require("./modules/mercadoPago/routes/paymentsRoute");
+const companyRoutes = require("./modules/company/routes/companyRoute");
 
 // Middleware de autenticação
 const authToken = require("./middlewares/authMiddleware");
@@ -39,6 +40,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/api/auth", userRoutes);
 app.use("/api/password", passwordResetRoutes);
 app.use("/api/budget", budgetRoutes);
+app.use("/api/company", companyRoutes);
 
 // Rota específica do webhook (evita autenticação desnecessária)
 app.use("/api/payment", paymentRoutes);
