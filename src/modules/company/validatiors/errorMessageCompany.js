@@ -20,25 +20,39 @@ const messageErrorCompany = () => ({
     max: (max) => `The contact name must have a maximum of ${max} characters.`,
     required: "The contact name is required.",
   },
-  address_id: {
-    invalid: "The address ID must be a valid number.",
-    required: "The address ID is required.",
+  address: {
+    empty: "The address cannot be empty.",
+    max: (max) => `The address must have a maximum of ${max} characters.`,
+    required: "The address is required.",
+  },
+  number: {
+    empty: "The number cannot be empty.",
+    max: (max) => `The number must have a maximum of ${max} characters.`,
+    required: "The number is required.",
+  },
+  city: {
+    empty: "The city cannot be empty.",
+    max: (max) => `The city must have a maximum of ${max} characters.`,
+    required: "The city is required.",
+  },
+  state_id: {
+    invalid: "The state ID must be a valid number.",
+    required: "The state ID is required.",
+  },
+  cep: {
+    empty: "The CEP cannot be empty.",
+    length: "The CEP must have exactly 8 digits.",
+    invalid: "The CEP must contain only numbers.",
+    required: "The CEP is required.",
   },
   whatsapp: {
-    empty: "The WhatsApp number cannot be empty.",
-    length: "The WhatsApp number must have exactly 11 digits.",
-    invalid: "The WhatsApp number must contain only numbers.",
-    required: "The WhatsApp number is required.",
+    max: (max) => `The WhatsApp number must have a maximum of ${max} characters.`,
   },
   mobile_phone: {
-    empty: "The mobile phone number cannot be empty.",
-    length: "The mobile phone number must have exactly 11 digits.",
-    invalid: "The mobile phone number must contain only numbers.",
-    required: "The mobile phone number is required.",
+    max: (max) => `The mobile phone number must have a maximum of ${max} characters.`,
   },
   landline_phone: {
-    length: "The landline phone number must have exactly 11 digits.",
-    invalid: "The landline phone number must contain only numbers.",
+    max: (max) => `The landline phone number must have a maximum of ${max} characters.`,
   },
   email: {
     empty: "The email cannot be empty.",
@@ -51,9 +65,6 @@ const messageErrorCompany = () => ({
     min: (min) => `The password must have at least ${min} characters.`,
     max: (max) => `The password must have a maximum of ${max} characters.`,
     required: "The password is required.",
-  },
-  status: {
-    invalid: "The status must be a boolean value.",
   },
   role_id: {
     invalid: "The role ID must be a valid number.",

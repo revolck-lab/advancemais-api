@@ -26,9 +26,9 @@ CREATE TABLE address (
     address VARCHAR(255) NOT NULL,
     number INT(8) NOT NULL,
     city VARCHAR(100) NOT NULL,
-    state_id VARCHAR(100) NOT NULL,
-    cep CHAR(8) NOT NULL
-    FOREIGN KEY (state_id) REFERENCES state(id),
+    state_id INT(2) NOT NULL,
+    cep CHAR(8) NOT NULL,
+    FOREIGN KEY (state_id) REFERENCES state(id)
 );
 
 -- Tabela de categoria de cursos (category)
@@ -69,7 +69,8 @@ CREATE TABLE user (
 -- Tabela de estado (state)
 CREATE TABLE state (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL,  -- Faltava esta vírgula
+    federal_unit CHAR(2) NOT NULL
 );
 
 -- Tabela de empresa (company)
@@ -107,7 +108,7 @@ CREATE TABLE vacancy (
     company_id INT NOT NULL,
     area_id INT NOT NULL,
     city varchar(255) NOT NULL,
-    state_id varchar(255) NOT NULL,
+    state_id INT(2) NOT NULL,
     publisehd_date date NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -335,7 +336,7 @@ CREATE TABLE company_payments (
     company_id INT NOT NULL,                        -- Referencia a tabela company
     package_id INT NOT NULL,                        -- Referencia a tabela signatures_packages
     mp_preference_id VARCHAR(50) NOT NULL,          -- ID da preferência do Mercado Pago
-    payment_id VARCHAR(50) NULL
+    payment_id VARCHAR(50) NULL,
     status VARCHAR(20) NOT NULL DEFAULT 'PENDING',  -- Status da transação (ex.: PENDING, APPROVED, CANCELLED)
     start_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Data de início da transação
     end_date TIMESTAMP,                             -- Data de conclusão ou expiração (opcional)
